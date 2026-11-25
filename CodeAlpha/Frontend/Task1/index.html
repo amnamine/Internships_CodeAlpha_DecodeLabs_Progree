@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lumière — A curated image gallery with lightbox, filters, and smooth navigation.">
+  <title>Lumière · Image Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="header">
+    <div class="header__inner">
+      <a href="#" class="logo" aria-label="Lumière home">
+        <span class="logo__mark">◈</span>
+        <span class="logo__text">Lumière</span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#gallery" class="nav__link">Gallery</a>
+        <a href="#about" class="nav__link">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Curated Collection</p>
+        <h1 class="hero__title">Moments Captured<br><em>in Light</em></h1>
+        <p class="hero__desc">Explore a hand-picked gallery of stunning photography. Filter by category, browse the carousel, or dive into the full collection.</p>
+      </div>
+      <div class="hero__stats">
+        <div class="stat">
+          <span class="stat__value" id="stat-count">12</span>
+          <span class="stat__label">Images</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value">4</span>
+          <span class="stat__label">Categories</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Carousel -->
+    <section class="carousel-section" aria-label="Featured image carousel">
+      <div class="carousel">
+        <div class="carousel__frame">
+          <img
+            class="carousel__image"
+            id="carousel-image"
+            src=""
+            alt=""
+            loading="eager"
+          >
+          <div class="carousel__overlay">
+            <span class="carousel__category" id="carousel-category"></span>
+            <h2 class="carousel__title" id="carousel-title"></h2>
+            <p class="carousel__caption" id="carousel-caption"></p>
+          </div>
+        </div>
+        <div class="carousel__controls">
+          <button class="btn btn--icon" id="carousel-prev" aria-label="Previous image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <div class="carousel__counter">
+            <span id="carousel-current">1</span>
+            <span class="carousel__divider">/</span>
+            <span id="carousel-total">12</span>
+          </div>
+          <button class="btn btn--icon" id="carousel-next" aria-label="Next image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+        <div class="carousel__dots" id="carousel-dots" role="tablist" aria-label="Carousel pagination"></div>
+      </div>
+    </section>
+
+    <!-- Gallery with Filters -->
+    <section class="gallery-section" id="gallery">
+      <div class="section-header">
+        <h2 class="section-title">The Collection</h2>
+        <p class="section-subtitle">Click any image to open the lightbox</p>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filter by category">
+        <button class="filter-btn filter-btn--active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="nature">Nature</button>
+        <button class="filter-btn" data-filter="architecture">Architecture</button>
+        <button class="filter-btn" data-filter="people">People</button>
+        <button class="filter-btn" data-filter="abstract">Abstract</button>
+      </div>
+
+      <div class="gallery" id="gallery-grid" role="list"></div>
+
+      <p class="gallery-empty hidden" id="gallery-empty">No images match this category.</p>
+    </section>
+
+    <!-- About -->
+    <section class="about-section" id="about">
+      <div class="about-card">
+        <h2 class="about-card__title">About This Gallery</h2>
+        <p class="about-card__text">Built with pure HTML, CSS, and JavaScript — featuring responsive layouts, category filters, a featured carousel, and a full-screen lightbox with keyboard navigation.</p>
+        <div class="about-card__features">
+          <span class="feature-tag">Responsive</span>
+          <span class="feature-tag">Lightbox</span>
+          <span class="feature-tag">Filters</span>
+          <span class="feature-tag">Animations</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Lumière Gallery · Task 1 — Image Gallery</p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox hidden" id="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
+    <div class="lightbox__backdrop" id="lightbox-backdrop"></div>
+    <div class="lightbox__container">
+      <button class="lightbox__close btn btn--icon" id="lightbox-close" aria-label="Close lightbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <button class="lightbox__nav lightbox__nav--prev btn btn--icon" id="lightbox-prev" aria-label="Previous image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <figure class="lightbox__figure">
+        <img class="lightbox__image" id="lightbox-image" src="" alt="">
+        <figcaption class="lightbox__info">
+          <span class="lightbox__category" id="lightbox-category"></span>
+          <h3 class="lightbox__title" id="lightbox-title"></h3>
+          <p class="lightbox__caption" id="lightbox-caption"></p>
+        </figcaption>
+      </figure>
+      <button class="lightbox__nav lightbox__nav--next btn btn--icon" id="lightbox-next" aria-label="Next image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+      <div class="lightbox__counter">
+        <span id="lightbox-current">1</span> / <span id="lightbox-total">12</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

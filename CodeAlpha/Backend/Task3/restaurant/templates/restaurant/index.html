@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gusto - Restaurant Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <span class="logo-text">GUSTO OS</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-tab="menu">
+                    <i class="fas fa-book-open"></i>
+                    <span>Customer Menu</span>
+                </li>
+                <li class="nav-item" data-tab="kitchen">
+                    <i class="fas fa-fire"></i>
+                    <span>Kitchen & Orders</span>
+                </li>
+                <li class="nav-item" data-tab="reservations">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Reservations</span>
+                </li>
+                <li class="nav-item" data-tab="inventory">
+                    <i class="fas fa-boxes"></i>
+                    <span>Inventory</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-badge">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <h4>Admin Panel</h4>
+                        <p>Store Manager</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            
+            <!-- Dashboard Tab -->
+            <section id="dashboard-tab" class="tab-content active">
+                <div class="top-bar">
+                    <div class="page-title">
+                        <h1>Executive Overview</h1>
+                        <p>Real-time analytics and restaurant operations control</p>
+                    </div>
+                    <div class="actions-bar">
+                        <button class="btn-primary" id="btn-open-reservation-modal"><i class="fas fa-calendar-plus"></i> New Bookings</button>
+                    </div>
+                </div>
+
+                <!-- KPI Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <p>Total Revenue</p>
+                            <h3 id="stat-total-sales">$0.00</h3>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card secondary-theme">
+                        <div class="stat-info">
+                            <p>Active Orders</p>
+                            <h3 id="stat-active-orders">0</h3>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-hamburger"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <p>Low Stock Items</p>
+                            <h3 id="stat-low-stock">0</h3>
+                        </div>
+                        <div class="stat-icon" style="color: var(--danger);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card secondary-theme">
+                        <div class="stat-info">
+                            <p>Table Occupancy</p>
+                            <h3 id="stat-table-occupancy">0%</h3>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-chair"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floor Plan & Table Layout -->
+                <div class="dashboard-layout">
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Interactive Dining Room Floor Plan</span>
+                            <div style="display: flex; gap: 10px; font-size: 0.75rem;">
+                                <span><span class="status-badge available" style="width: 8px; height:8px; display:inline-block; border-radius:50%; padding:0; margin-right:4px;"></span>Available</span>
+                                <span><span class="status-badge reserved" style="width: 8px; height:8px; display:inline-block; border-radius:50%; padding:0; margin-right:4px;"></span>Reserved</span>
+                                <span><span class="status-badge occupied" style="width: 8px; height:8px; display:inline-block; border-radius:50%; padding:0; margin-right:4px;"></span>Occupied</span>
+                            </div>
+                        </div>
+                        <div id="tables-layout" class="tables-layout-grid">
+                            <!-- Tables loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders panel -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-title">Recent Activity</div>
+                        <div class="custom-table-container">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order</th>
+                                        <th>Table</th>
+                                        <th>Status</th>
+                                        <th>Items</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-orders-list">
+                                    <!-- Loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Customer Menu Tab -->
+            <section id="menu-tab" class="tab-content">
+                <div class="top-bar">
+                    <div class="page-title">
+                        <h1>Culinary Creations</h1>
+                        <p>Browse categories and place orders to active tables</p>
+                    </div>
+                </div>
+
+                <div class="menu-filters">
+                    <button class="filter-btn active" data-category="all">All Items</button>
+                    <button class="filter-btn" data-category="appetizer">Appetizers</button>
+                    <button class="filter-btn" data-category="main">Main Courses</button>
+                    <button class="filter-btn" data-category="dessert">Desserts</button>
+                    <button class="filter-btn" data-category="beverage">Beverages</button>
+                </div>
+
+                <div id="menu-items-grid" class="menu-grid">
+                    <!-- Menu Cards loaded dynamically -->
+                </div>
+
+                <!-- Floating Cart Trigger -->
+                <button class="floating-cart-btn" id="cart-toggle-btn">
+                    <i class="fas fa-shopping-basket"></i>
+                    <div class="cart-count-badge" id="cart-badge">0</div>
+                </button>
+            </section>
+
+            <!-- Kitchen Kanban Board -->
+            <section id="kitchen-tab" class="tab-content">
+                <div class="top-bar">
+                    <div class="page-title">
+                        <h1>Live Kitchen monitor</h1>
+                        <p>Track progress of table orders and process preparing steps</p>
+                    </div>
+                </div>
+
+                <div class="kanban-board">
+                    <div class="kanban-col">
+                        <div class="col-header">
+                            <span>Pending</span>
+                            <span class="col-count" id="count-pending">0</span>
+                        </div>
+                        <div class="kanban-list" id="col-pending"></div>
+                    </div>
+                    <div class="kanban-col">
+                        <div class="col-header">
+                            <span>Preparing</span>
+                            <span class="col-count" id="count-preparing">0</span>
+                        </div>
+                        <div class="kanban-list" id="col-preparing"></div>
+                    </div>
+                    <div class="kanban-col">
+                        <div class="col-header">
+                            <span>Completed</span>
+                            <span class="col-count" id="count-completed">0</span>
+                        </div>
+                        <div class="kanban-list" id="col-completed"></div>
+                    </div>
+                    <div class="kanban-col">
+                        <div class="col-header">
+                            <span>Cancelled</span>
+                            <span class="col-count" id="count-cancelled">0</span>
+                        </div>
+                        <div class="kanban-list" id="col-cancelled"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reservations View -->
+            <section id="reservations-tab" class="tab-content">
+                <div class="top-bar">
+                    <div class="page-title">
+                        <h1>Bookings & Scheduling</h1>
+                        <p>Approve reservation entries and allocate tables</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="custom-table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Phone</th>
+                                    <th>Table Assigned</th>
+                                    <th>Scheduled Time</th>
+                                    <th>Size</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reservations-list">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inventory View -->
+            <section id="inventory-tab" class="tab-content">
+                <div class="top-bar">
+                    <div class="page-title">
+                        <h1>Stock & Inventory Control</h1>
+                        <p>Monitor raw ingredient levels and restock items</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="custom-table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Ingredient Name</th>
+                                    <th>Stock Balance</th>
+                                    <th>Reorder Alert Level</th>
+                                    <th>Status Alert</th>
+                                    <th>Restock Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-list">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Floating Shopping Cart Drawer -->
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Cart Summary</h3>
+            <button class="close-btn" id="close-cart-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items-list" id="cart-items">
+            <!-- Loaded dynamically -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>Total Amount:</span>
+                <span id="cart-total-val">$0.00</span>
+            </div>
+            
+            <form id="place-order-form">
+                <div class="form-group">
+                    <label for="order-table-select">Select Table for Order</label>
+                    <select id="order-table-select" class="form-control table-select-dropdown" required>
+                        <option value="">-- Choose Table --</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;"><i class="fas fa-receipt"></i> Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Reservation Creation -->
+    <div class="modal-overlay" id="reservation-modal">
+        <div class="modal-content">
+            <button class="close-btn" id="btn-close-reservation-modal"><i class="fas fa-times"></i></button>
+            <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-calendar-check"></i> Book a Table</h2>
+            <form id="new-reservation-form">
+                <div class="form-group">
+                    <label for="res-name">Guest Name</label>
+                    <input type="text" id="res-name" class="form-control" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="res-email">Email Address</label>
+                    <input type="email" id="res-email" class="form-control" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="res-phone">Phone Number</label>
+                    <input type="tel" id="res-phone" class="form-control" placeholder="+1 234 567 890" required>
+                </div>
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label for="res-guests">Guests</label>
+                        <input type="number" id="res-guests" min="1" max="10" class="form-control" value="2" required>
+                    </div>
+                    <div>
+                        <label for="res-time">Date & Time</label>
+                        <input type="datetime-local" id="res-time" class="form-control" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Table Direct Status Override -->
+    <div class="modal-overlay" id="table-actions-modal">
+        <div class="modal-content">
+            <button class="close-btn" id="btn-close-table-modal"><i class="fas fa-times"></i></button>
+            <h2 id="table-num-title" style="margin-bottom: 1.5rem;">Manage Table Status</h2>
+            <form id="table-action-form">
+                <div class="form-group">
+                    <label for="table-status-action">Select Status State</label>
+                    <select id="table-status-action" class="form-control">
+                        <option value="available">Available</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="occupied">Occupied</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Update Table</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

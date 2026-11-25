@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether | Selected Setup & checkout</title>
+  <meta name="description" content="Review your workspace selection and secure your next hardware upgrades.">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo" id="logo-link">
+        <div class="logo-dot"></div>
+        AETHER<span>STORE</span>
+      </a>
+      <nav>
+        <a href="/" id="nav-home">Store</a>
+        <a href="/cart.html" class="active" id="nav-cart-link">Cart</a>
+        <button class="cart-icon-btn" id="cart-btn" onclick="window.location.href='/cart.html'">
+          🛒 Cart <span class="cart-count">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Cart Page Layout -->
+  <main class="cart-layout" id="cart-page-container">
+    
+    <!-- Items Section -->
+    <div class="cart-items-section">
+      <div class="cart-title-row">
+        <h2>Your Selection</h2>
+      </div>
+      <div id="cart-items-list">
+        <!-- Managed dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- Checkout Sidebar panel -->
+    <div class="checkout-panel">
+      <h3>Order Details</h3>
+      
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal-amount">$0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Insured shipping</span>
+        <span style="color: var(--success); font-weight: 700;">FREE</span>
+      </div>
+      
+      <div class="summary-row total">
+        <span>Total Due</span>
+        <span id="total-amount">$0.00</span>
+      </div>
+
+      <div id="checkout-form-fields">
+        <h3 style="border: none; font-size: 1.1rem; margin: 1.5rem 0 0.75rem; padding: 0;">Shipping Information</h3>
+        <form id="checkout-form" class="checkout-form">
+          <div class="form-group">
+            <label for="cust-name">Full name</label>
+            <input type="text" id="cust-name" required placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="cust-email">Email Address</label>
+            <input type="email" id="cust-email" required placeholder="johndoe@email.com">
+          </div>
+          <div class="form-group">
+            <label for="cust-address">Shipping Address</label>
+            <textarea id="cust-address" required placeholder="123 Luxury Setup Boulevard, Suite 100, New York, NY 10001"></textarea>
+          </div>
+          
+          <button type="submit" class="hero-btn btn-checkout" id="checkout-submit-btn">Complete Checkout</button>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <a href="/" class="footer-logo">
+        AETHER<span>STORE</span>
+      </a>
+      <p>&copy; 2026 Aether Workspace Ltd. Crafted with premium UI guidelines.</p>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

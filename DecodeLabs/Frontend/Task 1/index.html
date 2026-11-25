@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1 - Static Webpage Design | DecodeLabs Frontend</title>
+  <meta name="description" content="State-of-the-art static webpage design showcase using HTML5 and CSS3 with glassmorphism, rich animations, and interactive features.">
+  
+  <!-- FontAwesome Icons & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient Dynamic Animated Background -->
+  <div class="ambient-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Decorative Nature Leaves (Matching image theme) -->
+  <svg class="botanical-leaf leaf-top-left" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10,90 Q40,10 90,10 Q60,60 10,90 Z" fill="#52b788" opacity="0.6"/>
+    <path d="M20,70 Q50,30 80,20" stroke="#2d6a4f" stroke-width="2" fill="none"/>
+  </svg>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="#" class="navbar-brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-code"></i>
+      </div>
+      <span>DecodeLabs</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#overview" class="nav-link">Overview</a></li>
+      <li><a href="#specs" class="nav-link">Requirements</a></li>
+      <li><a href="#playground" class="nav-link">Playground</a></li>
+      <li><a href="#skills" class="nav-link">Skills</a></li>
+      <li><a href="#feedback" class="nav-link">Feedback</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="theme-toggle-btn" id="themeToggle" title="Toggle Light/Dark Theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <a href="#specs" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.9rem;">
+        Get Started
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero" id="overview">
+      <div class="hero-grid">
+        
+        <!-- Left: Rotating Badge Seal Graphic (Replicating Image Exactly) -->
+        <div class="seal-wrapper fade-in-up">
+          <div class="badge-seal-container" id="tiltSeal">
+            
+            <!-- Circular SVG Text Orbit -->
+            <svg class="circular-text-svg" viewBox="0 0 300 300">
+              <path id="textPath" d="M 150, 150 m -115, 0 a 115,115 0 1,1 230,0 a 115,115 0 1,1 -230,0" fill="none"/>
+              <text>
+                <textPath href="#textPath" startOffset="0%">
+                  DECODELABS FRONTEND DEVELOPMENT • PROJECT 1: STATIC WEBPAGE DESIGN •
+                </textPath>
+              </text>
+            </svg>
+
+            <!-- Center Card Graphic -->
+            <div class="seal-center-card">
+              <div class="mock-window-header">
+                <div class="mock-dot dot-red"></div>
+                <div class="mock-dot dot-yellow"></div>
+                <div class="mock-dot dot-green"></div>
+              </div>
+              <div class="seal-illustration">
+                <div class="code-brackets">
+                  <span>&lt;/&gt;</span>
+                  <i class="fa-solid fa-paintbrush" style="font-size: 1rem; color: #ff70a6;"></i>
+                </div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #334155; text-align: center;">
+                  HTML5 & CSS3
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Emoji Accent -->
+            <span class="paint-palette-badge" title="Artistic Design">🎨</span>
+          </div>
+        </div>
+
+        <!-- Right: Text Content -->
+        <div class="hero-content fade-in-up">
+          <div class="hero-pill">
+            <i class="fa-solid fa-sparkles"></i> Frontend Internship - Task 1
+          </div>
+          <h1 class="hero-title">
+            Project 1 <br>
+            <span>Static Webpage Design</span>
+          </h1>
+          <p class="hero-subtitle">
+            Mastering the art of modern web fundamentals. Crafting responsive, accessible, and stunning static web interfaces with clean HTML5 semantic structure and vibrant CSS styling.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#specs" class="btn btn-primary">
+              <i class="fa-solid fa-compass"></i> Explore Specs
+            </a>
+            <a href="#playground" class="btn btn-outline">
+              <i class="fa-solid fa-laptop-code"></i> Code Preview
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Specs & Requirements Section -->
+    <section class="specs-section" id="specs">
+      <div class="section-header fade-in-up">
+        <span class="section-tag">Core Blueprint</span>
+        <h2 class="section-title">Project Requirements & Goal</h2>
+      </div>
+
+      <div class="specs-grid">
+        
+        <!-- Card 1: Goal -->
+        <div class="spec-card fade-in-up">
+          <div class="spec-icon-box">
+            <i class="fa-solid fa-bullseye"></i>
+          </div>
+          <h3>Primary Goal</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+            Create an exceptional, clean, and fully responsive static webpage utilizing pure HTML and CSS fundamentals.
+          </p>
+          <ul class="spec-list">
+            <li><i class="fa-solid fa-circle-check"></i> Pure HTML5 & CSS3 Implementation</li>
+            <li><i class="fa-solid fa-circle-check"></i> Visually Stunning Glassmorphic UI</li>
+            <li><i class="fa-solid fa-circle-check"></i> Flawless Cross-Browser Compatibility</li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Key Requirements -->
+        <div class="spec-card fade-in-up">
+          <div class="spec-icon-box">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+          <h3>Key Requirements</h3>
+          <ul class="spec-list">
+            <li><i class="fa-solid fa-check"></i> <strong>Proper HTML structure</strong> (Semantic tags, meta tags)</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Use of headings, sections, & images</strong></li>
+            <li><i class="fa-solid fa-check"></i> <strong>Clean and readable layout</strong> (Grid & Flexbox)</li>
+            <li><i class="fa-solid fa-check"></i> Vibrant color system & rich animations</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Key Skills -->
+        <div class="spec-card fade-in-up">
+          <div class="spec-icon-box">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <h3>Key Skills Mastered</h3>
+          <ul class="spec-list">
+            <li><i class="fa-solid fa-star"></i> HTML Fundamentals & Accessibility</li>
+            <li><i class="fa-solid fa-star"></i> Advanced CSS Styling & Variables</li>
+            <li><i class="fa-solid fa-star"></i> UI/UX Design System Thinking</li>
+            <li><i class="fa-solid fa-star"></i> Responsive Mobile-First Design</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Code Playground & Preview Section -->
+    <section class="playground-section" id="playground">
+      <div class="section-header fade-in-up">
+        <span class="section-tag">Interactive Workspace</span>
+        <h2 class="section-title">Live Code & Architecture</h2>
+      </div>
+
+      <div class="glass-card fade-in-up">
+        <div class="tab-container">
+          <button class="tab-btn active" onclick="switchTab('htmlTab')">HTML Structure</button>
+          <button class="tab-btn" onclick="switchTab('cssTab')">CSS Styling</button>
+        </div>
+
+        <!-- Code Block Viewer -->
+        <div class="code-editor-window">
+          <div class="editor-header">
+            <div class="editor-dots">
+              <div class="mock-dot dot-red"></div>
+              <div class="mock-dot dot-yellow"></div>
+              <div class="mock-dot dot-green"></div>
+            </div>
+            <span class="editor-title" id="tabFilename">index.html</span>
+            <i class="fa-regular fa-copy" style="color: #a6adc8; cursor: pointer;" title="Copy Code"></i>
+          </div>
+
+          <!-- Tab Content HTML -->
+          <pre class="editor-body" id="htmlCode"><code><span class="comment">&lt;!-- Project 1: Static Webpage Design --&gt;</span>
+<span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="string">"hero-section"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"container"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h1</span> <span class="attr">class</span>=<span class="string">"heading"</span><span class="tag">&gt;</span>DecodeLabs Static Webpage<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Built with Semantic HTML5 and Glassmorphism CSS3.<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/section&gt;</span></code></pre>
+
+          <!-- Tab Content CSS (Hidden initially) -->
+          <pre class="editor-body" id="cssCode" style="display: none;"><code><span class="comment">/* Modern Glassmorphism Styling */</span>
+<span class="keyword">.hero-card</span> {
+  <span class="attr">background</span>: <span class="string">rgba(255, 255, 255, 0.45)</span>;
+  <span class="attr">backdrop-filter</span>: <span class="string">blur(20px)</span>;
+  <span class="attr">border-radius</span>: <span class="string">28px</span>;
+  <span class="attr">box-shadow</span>: <span class="string">0 20px 60px rgba(0, 0, 0, 0.1)</span>;
+  <span class="attr">transition</span>: <span class="string">all 0.4s ease</span>;
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills & Progress Showcase -->
+    <section class="skills-section" id="skills">
+      <div class="glass-card fade-in-up">
+        <div class="section-header" style="margin-bottom: 30px;">
+          <span class="section-tag">Competency Matrix</span>
+          <h2 class="section-title">Mastered Web Standards</h2>
+        </div>
+
+        <div class="skills-wrapper">
+          <!-- Skill 1 -->
+          <div class="skill-bar-container">
+            <div class="skill-info">
+              <span><i class="fa-brands fa-html5" style="color: #e34f26; margin-right: 8px;"></i> HTML5 Semantic Structure</span>
+              <span>98%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" data-progress="98%"></div>
+            </div>
+          </div>
+
+          <!-- Skill 2 -->
+          <div class="skill-bar-container">
+            <div class="skill-info">
+              <span><i class="fa-brands fa-css3-alt" style="color: #1572b6; margin-right: 8px;"></i> CSS3 Glassmorphism & Animations</span>
+              <span>95%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" data-progress="95%"></div>
+            </div>
+          </div>
+
+          <!-- Skill 3 -->
+          <div class="skill-bar-container">
+            <div class="skill-info">
+              <span><i class="fa-solid fa-mobile-screen" style="color: #17c3b2; margin-right: 8px;"></i> Responsive Grid & Flexbox Layout</span>
+              <span>100%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" data-progress="100%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Feedback Section -->
+    <section class="contact-section" id="feedback">
+      <div class="glass-card fade-in-up">
+        <div class="form-grid">
+          <div>
+            <span class="section-tag">Get In Touch</span>
+            <h2 class="section-title" style="margin-bottom: 16px;">Project Feedback & Inquiries</h2>
+            <p style="color: var(--text-muted); font-size: 1.05rem;">
+              Have questions about this static webpage task or want to review the code structure? Drop a message below!
+            </p>
+          </div>
+
+          <form id="contactForm" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+            <div class="input-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" class="input-field" placeholder="e.g. Alex Morgan" required>
+            </div>
+            <div class="input-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" class="input-field" placeholder="alex@decodelabs.com" required>
+            </div>
+            <div class="input-group">
+              <label for="message">Feedback / Message</label>
+              <textarea id="message" class="input-field" rows="4" placeholder="Write your thoughts..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+              <i class="fa-solid fa-paper-plane"></i> Send Feedback
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <div class="navbar-brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-code"></i>
+        </div>
+        <span>DecodeLabs Frontend</span>
+      </div>
+      <p style="color: var(--text-light); font-size: 0.9rem;">
+        Task 1: Static Webpage Design • Built with HTML5 & CSS3
+      </p>
+      <div class="social-links">
+        <a href="#" class="social-btn" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="#" class="social-btn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" class="social-btn" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for interactions -->
+  <script src="script.js"></script>
+</body>
+</html>

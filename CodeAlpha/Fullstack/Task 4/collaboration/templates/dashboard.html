@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CoSync{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-hero">
+        <h1>Welcome, <span class="highlight">{{ user.username }}</span></h1>
+        <p>Start a secure end-to-end encrypted video call or join a collaborative drawing workspace.</p>
+    </div>
+
+    {% if error %}
+        <div class="alert alert-danger animate-fade">
+            <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="dashboard-grid">
+        <!-- Action Card: Create Room -->
+        <div class="dash-card">
+            <div class="card-icon"><i class="fa-solid fa-video"></i></div>
+            <h3>Create a Room</h3>
+            <p>Set up a brand new meeting room, complete with a shared canvas board, text chat, and secure video streams.</p>
+            <form method="POST" class="dash-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create">
+                <div class="form-group">
+                    <input type="text" name="room_name" placeholder="E.g., Design Sync, Brainstorm" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fa-solid fa-plus"></i> Create & Join Room
+                </button>
+            </form>
+        </div>
+
+        <!-- Action Card: Join Room -->
+        <div class="dash-card">
+            <div class="card-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+            <h3>Join a Room</h3>
+            <p>Have an invite code? Enter the room code to instantly connect with your team members in real-time.</p>
+            <form method="POST" class="dash-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="join">
+                <div class="form-group">
+                    <input type="text" name="room_code" placeholder="Enter 36-character room code..." required>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-block">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Join Meeting
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Rooms List -->
+    <div class="rooms-history-section">
+        <h2>Your Workspace History</h2>
+        {% if rooms %}
+            <div class="rooms-list">
+                {% for room in rooms %}
+                    <div class="room-item">
+                        <div class="room-info">
+                            <span class="room-icon"><i class="fa-solid fa-door-open"></i></span>
+                            <div class="room-text">
+                                <h4>{{ room.name }}</h4>
+                                <small>Created: {{ room.created_at|date:"M d, Y H:i" }}</small>
+                            </div>
+                        </div>
+                        <div class="room-code-display">
+                            <code>{{ room.code }}</code>
+                            <button class="btn-copy" onclick="copyToClipboard('{{ room.code }}', this)" title="Copy Room Code">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <a href="{% url 'room' room.code %}" class="btn btn-outline btn-sm">Join Room</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <p>No recent meeting workspaces. Create one above to get started!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+        const icon = button.querySelector('i');
+        icon.className = 'fa-solid fa-check text-success';
+        setTimeout(() => {
+            icon.className = 'fa-regular fa-copy';
+        }, 2000);
+    });
+}
+</script>
+{% endblock %}

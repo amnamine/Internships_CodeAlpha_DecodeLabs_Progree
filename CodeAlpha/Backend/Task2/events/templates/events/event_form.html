@@ -1,0 +1,55 @@
+{% extends 'events/base.html' %}
+
+{% block title %}{{ title }} | Eventora{% endblock %}
+
+{% block content %}
+<div class="form-container-wrapper">
+    <div class="back-nav">
+        <a href="{% url 'dashboard' %}" class="btn-back"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="form-card">
+        <div class="form-header">
+            <h2>{{ title }}</h2>
+            <p>Fill out the details below to host your premium event on Eventora.</p>
+        </div>
+
+        <form method="POST" class="custom-form">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <p class="error-msg"><i class="bi bi-exclamation-circle-fill"></i> {{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group {% if field.errors %}has-errors{% endif %}">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                        {% if field.field.required %}<span class="required-star">*</span>{% endif %}
+                    </label>
+                    <div class="field-control-wrapper">
+                        {{ field }}
+                    </div>
+                    {% if field.help_text %}
+                        <p class="form-help-text">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p class="error-msg"><i class="bi bi-exclamation-circle-fill"></i> {{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary btn-submit-form">
+                    {% if event %}Save Changes{% else %}Create Event{% endif %}
+                </button>
+                <a href="{% url 'dashboard' %}" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

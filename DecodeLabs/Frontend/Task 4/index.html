@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="emerald">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniForm Pro | Next-Gen Form Design & Validation Suite</title>
+    <meta name="description" content="An ultra-luxurious, feature-rich interactive form design and real-time validation application with micro-animations, theme engine, and live JSON inspector.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome CDN for Crisp Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Animated Blobs -->
+    <div class="bg-gradient-shapes">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Header Bar -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>OmniForm <span>Studio</span></h1>
+                    <span class="badge">Task 4 • Form & Validation</span>
+                </div>
+            </div>
+
+            <!-- Mode Selector Switcher -->
+            <nav class="form-mode-nav">
+                <button class="mode-btn active" data-mode="wizard" id="btn-mode-wizard">
+                    <i class="fa-solid fa-list-check"></i> <span>Multi-Step Wizard</span>
+                </button>
+                <button class="mode-btn" data-mode="contact" id="btn-mode-contact">
+                    <i class="fa-solid fa-paper-plane"></i> <span>Feedback & Support</span>
+                </button>
+                <button class="mode-btn" data-mode="survey" id="btn-mode-survey">
+                    <i class="fa-solid fa-square-poll-vertical"></i> <span>Interactive Survey</span>
+                </button>
+            </nav>
+
+            <!-- Quick Action Toolbar -->
+            <div class="header-actions">
+                <div class="theme-picker">
+                    <button class="theme-btn" id="theme-toggle-btn" title="Change Theme">
+                        <i class="fa-solid fa-palette"></i>
+                    </button>
+                    <div class="theme-dropdown" id="theme-dropdown">
+                        <button class="theme-option active" data-theme-val="emerald">
+                            <span class="theme-dot emerald"></span> Organic Mint
+                        </button>
+                        <button class="theme-option" data-theme-val="cyber">
+                            <span class="theme-dot cyber"></span> Cyberpunk Neon
+                        </button>
+                        <button class="theme-option" data-theme-val="dark">
+                            <span class="theme-dot dark"></span> Deep Space
+                        </button>
+                        <button class="theme-option" data-theme-val="light">
+                            <span class="theme-dot light"></span> Crystal Light
+                        </button>
+                    </div>
+                </div>
+                <button class="icon-btn" id="btn-toggle-inspector" title="Toggle Live Data Inspector">
+                    <i class="fa-solid fa-code"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-layout" id="app-layout">
+        <!-- Main Form Sandbox Column -->
+        <section class="form-section">
+            <div class="form-card-container" id="form-card-container">
+
+                <!-- Dynamic Form Header -->
+                <div class="form-header">
+                    <div class="title-group">
+                        <h2 id="form-title">Account Registration Wizard</h2>
+                        <p id="form-subtitle">Complete all steps to experience real-time validation & rich animated micro-interactions.</p>
+                    </div>
+
+                    <div class="quick-fill-bar">
+                        <button type="button" class="action-chip" id="btn-fill-valid">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Fill Valid
+                        </button>
+                        <button type="button" class="action-chip warning" id="btn-fill-invalid">
+                            <i class="fa-solid fa-bug"></i> Trigger Errors
+                        </button>
+                        <button type="button" class="action-chip danger" id="btn-clear-form">
+                            <i class="fa-solid fa-trash-can"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Wizard Progress Indicator (Only visible for multi-step) -->
+                <div class="wizard-progress-wrapper" id="wizard-progress-wrapper">
+                    <div class="wizard-steps">
+                        <div class="step-item active" data-step="1">
+                            <div class="step-circle"><i class="fa-solid fa-user"></i></div>
+                            <span class="step-label">Personal Info</span>
+                        </div>
+                        <div class="step-divider"></div>
+                        <div class="step-item" data-step="2">
+                            <div class="step-circle"><i class="fa-solid fa-lock"></i></div>
+                            <span class="step-label">Security</span>
+                        </div>
+                        <div class="step-divider"></div>
+                        <div class="step-item" data-step="3">
+                            <div class="step-circle"><i class="fa-solid fa-sliders"></i></div>
+                            <span class="step-label">Preferences</span>
+                        </div>
+                        <div class="step-divider"></div>
+                        <div class="step-item" data-step="4">
+                            <div class="step-circle"><i class="fa-solid fa-circle-check"></i></div>
+                            <span class="step-label">Verification</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="wizard-bar-fill" style="width: 25%;"></div>
+                    </div>
+                </div>
+
+                <!-- FORM ELEMENT -->
+                <form id="main-interactive-form" novalidate autocomplete="off">
+                    
+                    <!-- ========================================== -->
+                    <!-- WIZARD STEP 1: PERSONAL DETAILS            -->
+                    <!-- ========================================== -->
+                    <div class="form-step-pane active" data-pane="1">
+                        <div class="grid-2-col">
+                            <!-- Full Name Field -->
+                            <div class="form-group" id="group-fullname">
+                                <label for="fullname" class="form-label">Full Name <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-user input-icon"></i>
+                                    <input type="text" id="fullname" name="fullname" class="form-input" placeholder="e.g. Alex Morgan" required minlength="3" maxlength="40">
+                                    <div class="status-indicator">
+                                        <i class="fa-solid fa-circle-check valid-icon"></i>
+                                        <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="feedback-msg" id="msg-fullname">Please enter a valid full name (minimum 3 characters).</div>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="form-group" id="group-email">
+                                <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-envelope input-icon"></i>
+                                    <input type="email" id="email" name="email" class="form-input" placeholder="alex@company.com" required>
+                                    <div class="status-indicator">
+                                        <i class="fa-solid fa-circle-check valid-icon"></i>
+                                        <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="feedback-msg" id="msg-email">Please enter a valid email address.</div>
+                            </div>
+                        </div>
+
+                        <div class="grid-2-col">
+                            <!-- Phone Field -->
+                            <div class="form-group" id="group-phone">
+                                <label for="phone" class="form-label">Phone Number <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-phone input-icon"></i>
+                                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 019-2834" required>
+                                    <div class="status-indicator">
+                                        <i class="fa-solid fa-circle-check valid-icon"></i>
+                                        <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="feedback-msg" id="msg-phone">Must be a valid 10+ digit phone format.</div>
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="form-group" id="group-dob">
+                                <label for="dob" class="form-label">Date of Birth <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-calendar-days input-icon"></i>
+                                    <input type="date" id="dob" name="dob" class="form-input" required>
+                                    <div class="status-indicator">
+                                        <i class="fa-solid fa-circle-check valid-icon"></i>
+                                        <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="feedback-msg" id="msg-dob">You must be at least 18 years old.</div>
+                            </div>
+                        </div>
+
+                        <!-- Role / Country Selection -->
+                        <div class="grid-2-col">
+                            <div class="form-group" id="group-country">
+                                <label for="country" class="form-label">Country / Region <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-globe input-icon"></i>
+                                    <select id="country" name="country" class="form-input select-input" required>
+                                        <option value="">-- Select Country --</option>
+                                        <option value="US">United States</option>
+                                        <option value="UK">United Kingdom</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="FR">France</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="TN">Tunisia</option>
+                                        <option value="JP">Japan</option>
+                                        <option value="AU">Australia</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down select-chevron"></i>
+                                    <div class="status-indicator">
+                                        <i class="fa-solid fa-circle-check valid-icon"></i>
+                                        <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="feedback-msg" id="msg-country">Please select your country.</div>
+                            </div>
+
+                            <div class="form-group" id="group-role">
+                                <label for="role" class="form-label">Primary Role <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-briefcase input-icon"></i>
+                                    <select id="role" name="role" class="form-input select-input" required>
+                                        <option value="">-- Select Role --</option>
+                                        <option value="frontend">Frontend Developer</option>
+                                        <option value="fullstack">Fullstack Engineer</option>
+                                        <option value="designer">UI/UX Designer</option>
+                                        <option value="pm">Product Manager</option>
+                                        <option value="data">Data Scientist</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down select-chevron"></i>
+                                    <div class="status-indicator">
+                                        <i class="fa-solid fa-circle-check valid-icon"></i>
+                                        <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="feedback-msg" id="msg-role">Please choose a primary role.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- WIZARD STEP 2: SECURITY & PASSWORDS        -->
+                    <!-- ========================================== -->
+                    <div class="form-step-pane" data-pane="2">
+                        <!-- Password Field -->
+                        <div class="form-group" id="group-password">
+                            <label for="password" class="form-label">Create Password <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-key input-icon"></i>
+                                <input type="password" id="password" name="password" class="form-input" placeholder="••••••••••••" required>
+                                <button type="button" class="toggle-password-btn" id="toggle-password" title="Show/Hide Password">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <div class="status-indicator">
+                                    <i class="fa-solid fa-circle-check valid-icon"></i>
+                                    <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                </div>
+                            </div>
+                            <div class="feedback-msg" id="msg-password">Password does not satisfy complexity requirements.</div>
+
+                            <!-- Live Password Strength Widget -->
+                            <div class="password-meter-card">
+                                <div class="meter-header">
+                                    <span>Password Strength:</span>
+                                    <strong id="strength-text" class="strength-label text-muted">None</strong>
+                                </div>
+                                <div class="meter-bar-track">
+                                    <div class="meter-bar-fill" id="strength-meter-fill"></div>
+                                </div>
+                                <ul class="strength-checklist" id="strength-checklist">
+                                    <li data-rule="length"><i class="fa-solid fa-circle"></i> At least 8 characters</li>
+                                    <li data-rule="uppercase"><i class="fa-solid fa-circle"></i> One uppercase letter</li>
+                                    <li data-rule="number"><i class="fa-solid fa-circle"></i> One number (0-9)</li>
+                                    <li data-rule="special"><i class="fa-solid fa-circle"></i> One special symbol (!@#$%^&*)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group" id="group-confirm-password">
+                            <label for="confirm_password" class="form-label">Confirm Password <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-shield-cat input-icon"></i>
+                                <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="••••••••••••" required>
+                                <button type="button" class="toggle-password-btn" id="toggle-confirm-password">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <div class="status-indicator">
+                                    <i class="fa-solid fa-circle-check valid-icon"></i>
+                                    <i class="fa-solid fa-triangle-exclamation invalid-icon"></i>
+                                </div>
+                            </div>
+                            <div class="feedback-msg" id="msg-confirm-password">Passwords do not match.</div>
+                        </div>
+
+                        <!-- Security Question Select -->
+                        <div class="form-group" id="group-sec-question">
+                            <label for="sec_question" class="form-label">Security Question <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-circle-question input-icon"></i>
+                                <select id="sec_question" name="sec_question" class="form-input select-input" required>
+                                    <option value="">-- Choose Security Question --</option>
+                                    <option value="pet">What was the name of your first pet?</option>
+                                    <option value="school">What primary school did you attend?</option>
+                                    <option value="city">In what city were you born?</option>
+                                    <option value="car">What was your first car model?</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-chevron"></i>
+                            </div>
+                            <div class="feedback-msg" id="msg-sec-question">Please select a security question.</div>
+                        </div>
+
+                        <div class="form-group" id="group-sec-answer">
+                            <label for="sec_answer" class="form-label">Security Answer <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-signature input-icon"></i>
+                                <input type="text" id="sec_answer" name="sec_answer" class="form-input" placeholder="Your secret answer..." required minlength="2">
+                            </div>
+                            <div class="feedback-msg" id="msg-sec-answer">Answer must be at least 2 characters.</div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- WIZARD STEP 3: PREFERENCES & UPLOAD        -->
+                    <!-- ========================================== -->
+                    <div class="form-step-pane" data-pane="3">
+                        <!-- Bio / Description Field with Character Count -->
+                        <div class="form-group" id="group-bio">
+                            <div class="label-with-counter">
+                                <label for="bio" class="form-label">Personal Bio / Message</label>
+                                <span class="char-count-badge" id="bio-char-count">0 / 250</span>
+                            </div>
+                            <div class="input-wrapper">
+                                <textarea id="bio" name="bio" class="form-input textarea-input" placeholder="Tell us a little bit about yourself or project goals..." maxlength="250" rows="3"></textarea>
+                            </div>
+                            <div class="feedback-msg" id="msg-bio">Bio message text is valid.</div>
+                        </div>
+
+                        <!-- Drag and Drop File Attachment -->
+                        <div class="form-group" id="group-file-upload">
+                            <label class="form-label">Avatar / Verification Document (Optional, Max 5MB)</label>
+                            <div class="file-drop-zone" id="drop-zone">
+                                <input type="file" id="file_input" name="file_input" accept="image/*,.pdf,.doc,.docx" hidden>
+                                <div class="drop-zone-content" id="drop-zone-content">
+                                    <div class="upload-icon-circle">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    </div>
+                                    <p class="drop-text">Drag & drop your avatar image or document here</p>
+                                    <p class="drop-subtext">Supports PNG, JPG, WEBP, PDF (Max size 5MB)</p>
+                                    <button type="button" class="browse-btn" id="btn-browse-file">Browse File</button>
+                                </div>
+                                <div class="file-preview-card hidden" id="file-preview-card">
+                                    <div class="preview-thumbnail" id="preview-thumbnail">
+                                        <i class="fa-solid fa-file-lines"></i>
+                                    </div>
+                                    <div class="preview-info">
+                                        <span class="file-name" id="preview-filename">document.png</span>
+                                        <span class="file-size" id="preview-filesize">1.2 MB</span>
+                                        <div class="upload-progress">
+                                            <div class="progress-bar-fill" style="width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="remove-file-btn" id="btn-remove-file" title="Remove File">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="feedback-msg" id="msg-file-upload">File size exceeds limit or format unsupported.</div>
+                        </div>
+
+                        <!-- Radio Cards: Experience Level -->
+                        <div class="form-group">
+                            <label class="form-label">Experience Level</label>
+                            <div class="radio-card-grid">
+                                <label class="radio-card">
+                                    <input type="radio" name="experience" value="junior" checked>
+                                    <div class="radio-card-content">
+                                        <div class="radio-icon"><i class="fa-solid fa-seedling"></i></div>
+                                        <div class="radio-info">
+                                            <strong>Junior</strong>
+                                            <span>0 - 2 Years</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="experience" value="mid">
+                                    <div class="radio-card-content">
+                                        <div class="radio-icon"><i class="fa-solid fa-chart-line"></i></div>
+                                        <div class="radio-info">
+                                            <strong>Mid-Level</strong>
+                                            <span>2 - 5 Years</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="experience" value="senior">
+                                    <div class="radio-card-content">
+                                        <div class="radio-icon"><i class="fa-solid fa-trophy"></i></div>
+                                        <div class="radio-info">
+                                            <strong>Senior</strong>
+                                            <span>5+ Years</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- WIZARD STEP 4: VERIFICATION & SUMMARY      -->
+                    <!-- ========================================== -->
+                    <div class="form-step-pane" data-pane="4">
+                        <div class="summary-box">
+                            <h3><i class="fa-solid fa-clipboard-check"></i> Form Submission Review</h3>
+                            <p>Please double-check your configuration before submitting. All values have been dynamically formatted.</p>
+
+                            <div class="summary-list" id="summary-preview-list">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Terms & Conditions Checkbox -->
+                        <div class="form-group checkbox-group" id="group-terms">
+                            <label class="custom-checkbox-container">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <span class="checkmark"></span>
+                                <span class="checkbox-text">
+                                    I agree to the <a href="#" id="link-terms">Terms of Service</a> and acknowledge the <a href="#">Privacy Policy</a>. <span class="required">*</span>
+                                </span>
+                            </label>
+                            <div class="feedback-msg" id="msg-terms">You must accept the terms before submitting.</div>
+                        </div>
+
+                        <!-- Newsletter Switch -->
+                        <div class="form-group switch-group">
+                            <label class="toggle-switch-container">
+                                <input type="checkbox" id="newsletter" name="newsletter" checked>
+                                <span class="switch-slider"></span>
+                                <span class="switch-label">Subscribe to weekly product updates & security alerts</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Action Footer -->
+                    <div class="form-actions-footer">
+                        <button type="button" class="btn btn-secondary hidden" id="btn-prev-step">
+                            <i class="fa-solid fa-arrow-left"></i> Previous
+                        </button>
+                        <div class="flex-spacer"></div>
+                        <button type="button" class="btn btn-primary" id="btn-next-step">
+                            Next Step <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" class="btn btn-success hidden" id="btn-submit-form">
+                            <i class="fa-solid fa-paper-plane"></i> Submit Registration
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- Live Inspector & Payload Drawer Side Panel -->
+        <aside class="inspector-aside" id="inspector-aside">
+            <div class="inspector-card">
+                <div class="inspector-header">
+                    <h3><i class="fa-solid fa-chart-pie"></i> Dynamic Form Engine</h3>
+                    <button class="close-inspector-btn" id="btn-close-inspector"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <!-- Form Health Meter -->
+                <div class="health-card">
+                    <div class="health-info">
+                        <span>Form Completeness</span>
+                        <strong id="health-percentage">0%</strong>
+                    </div>
+                    <div class="health-bar-track">
+                        <div class="health-bar-fill" id="health-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="health-badges">
+                        <span class="badge-chip valid" id="badge-valid-count"><i class="fa-solid fa-check"></i> 0 Valid</span>
+                        <span class="badge-chip invalid" id="badge-invalid-count"><i class="fa-solid fa-xmark"></i> 0 Invalid</span>
+                    </div>
+                </div>
+
+                <!-- Live State JSON Tab Container -->
+                <div class="inspector-tabs">
+                    <button class="tab-btn active" data-tab="json">JSON State</button>
+                    <button class="tab-btn" data-tab="logs">Validation Logs</button>
+                    <button class="tab-btn" data-tab="history">Submissions (<span id="history-count">0</span>)</button>
+                </div>
+
+                <div class="tab-pane active" id="pane-json">
+                    <div class="code-box-wrapper">
+                        <div class="code-box-header">
+                            <span>live-state.json</span>
+                            <button class="copy-btn" id="btn-copy-json"><i class="fa-solid fa-copy"></i> Copy</button>
+                        </div>
+                        <pre class="json-code" id="json-output"><code>{}</code></pre>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="pane-logs">
+                    <div class="log-feed" id="log-feed">
+                        <div class="log-entry info">
+                            <span class="time">[System]</span> Form engine initialized. Listening for real-time changes...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="pane-history">
+                    <div class="history-list" id="history-list">
+                        <p class="empty-state">No saved submissions yet.</p>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+    </main>
+
+    <!-- Modal Success Overlay -->
+    <div class="modal-overlay hidden" id="success-modal">
+        <div class="modal-card">
+            <div class="modal-icon-header">
+                <div class="success-ring">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+            </div>
+            <h2>Submission Successful!</h2>
+            <p>Your input passed all validation checks with 100% precision. The payload has been recorded.</p>
+
+            <div class="submitted-details-box" id="modal-details-box">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-primary" id="btn-close-modal">Done & Reset Form</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>Crafted for DECODELABS Internship Task 4 • Form Design & Real-Time JavaScript Validation Suite</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

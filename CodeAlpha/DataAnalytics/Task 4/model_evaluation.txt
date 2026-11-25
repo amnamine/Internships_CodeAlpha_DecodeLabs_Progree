@@ -1,0 +1,24 @@
+=== Supervised ML Model (Logistic Regression) ===
+Accuracy: 0.7060
+              precision    recall  f1-score   support
+
+    negative       0.73      0.63      0.68      1001
+     neutral       0.64      0.76      0.69      1430
+    positive       0.81      0.71      0.75      1103
+
+    accuracy                           0.71      3534
+   macro avg       0.72      0.70      0.71      3534
+weighted avg       0.72      0.71      0.71      3534
+
+=== Lexicon-based Model (VADER) ===
+Accuracy: 0.6480
+              precision    recall  f1-score   support
+
+    negative       0.70      0.63      0.66      1001
+     neutral       0.73      0.48      0.58      1430
+    positive       0.58      0.88      0.70      1103
+
+    accuracy                           0.65      3534
+   macro avg       0.67      0.66      0.65      3534
+weighted avg       0.67      0.65      0.64      3534
+

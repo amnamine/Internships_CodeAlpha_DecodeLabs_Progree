@@ -1,0 +1,78 @@
+{% extends 'board/base.html' %}
+
+{% block title %}Post a Job - CareerPulse{% endblock %}
+
+{% block content %}
+<div style="margin-top: 2rem;">
+    <a href="{% url 'dashboard' %}" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-weight: 500; margin-bottom: 1.5rem;" class="nav-link">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Back to Dashboard
+    </a>
+</div>
+
+<div class="auth-wrapper" style="padding: 2rem 0;">
+    <div class="auth-card" style="max-width: 700px;">
+        <h2 class="auth-title" style="text-align: left;">Post a New Job Opportunity</h2>
+        <p class="auth-subtitle" style="text-align: left; margin-bottom: 1.5rem;">Fill in the information below to publish a position on CareerPulse.</p>
+        
+        <form method="POST" action="{% url 'post_job' %}" class="auth-form">
+            {% csrf_token %}
+            
+            <!-- Job Title -->
+            <div class="form-group">
+                <label for="title">Job Title</label>
+                <input type="text" name="title" id="title" class="input-field" required placeholder="e.g. Senior Software Engineer">
+            </div>
+
+            <!-- Job Type and Category -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="job_type">Job Type</label>
+                    <select name="job_type" id="job_type" class="input-field">
+                        {% for code, label in job_types %}
+                            <option value="{{ code }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" name="category" id="category" class="input-field" required placeholder="e.g. Backend Development" value="Software Development">
+                </div>
+            </div>
+
+            <!-- Location and Salary -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" name="location" id="location" class="input-field" required placeholder="e.g. Remote / San Francisco, CA">
+                </div>
+                
+                <div class="form-group">
+                    <label for="salary_range">Salary Range (Optional)</label>
+                    <input type="text" name="salary_range" id="salary_range" class="input-field" placeholder="e.g. $120,000 - $150,000">
+                </div>
+            </div>
+
+            <!-- Job Description -->
+            <div class="form-group">
+                <label for="description">Job Description</label>
+                <textarea name="description" id="description" rows="8" class="input-field" required style="resize: vertical;" placeholder="Provide a detailed description of the role, responsibilities, and team environment..."></textarea>
+            </div>
+
+            <!-- Job Requirements -->
+            <div class="form-group">
+                <label for="requirements">Candidate Requirements (One per line)</label>
+                <textarea name="requirements" id="requirements" rows="6" class="input-field" required style="resize: vertical;" placeholder="e.g.&#10;3+ years of experience with Python&#10;Familiarity with Django and REST APIs&#10;Excellent communication skills"></textarea>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">List key qualifications, one line per requirement.</span>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="flex: 1;">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="flex: 2;">
+                    Publish Listing <i data-lucide="globe"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

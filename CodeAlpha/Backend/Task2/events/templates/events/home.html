@@ -1,0 +1,114 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Explore Premium Events | Eventora{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-content">
+        <h1 class="hero-title">Experience <span class="gradient-text">Unforgettable</span> Events</h1>
+        <p class="hero-subtitle">Discover and book tickets for the most popular technology, art, design, and entertainment gatherings.</p>
+        
+        <!-- Search Bar -->
+        <form method="GET" action="{% url 'home' %}" class="search-form">
+            <div class="search-wrapper">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search events by title, description or location..." class="search-input">
+                {% if selected_category %}
+                    <input type="hidden" name="category" value="{{ selected_category }}">
+                {% endif %}
+                <button type="submit" class="btn-search">Explore</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Discovery Section -->
+<section class="discovery-section">
+    <!-- Category Filter Bar -->
+    <div class="category-bar">
+        <a href="?{% if search_query %}q={{ search_query }}{% endif %}" class="category-chip {% if not selected_category %}active{% endif %}">
+            <i class="bi bi-grid-fill"></i> All Events
+        </a>
+        {% for cat in categories %}
+            <a href="?category={{ cat.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" class="category-chip {% if selected_category == cat.slug %}active{% endif %}">
+                <i class="bi {{ cat.icon }}"></i> {{ cat.name }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <!-- Events Grid -->
+    <div class="events-grid-header">
+        <h2>
+            {% if search_query %}
+                Search Results for "{{ search_query }}"
+            {% elif selected_category %}
+                Discovering {{ selected_category|title }} Events
+            {% else %}
+                Featured Events
+            {% endif %}
+        </h2>
+        <span class="events-count">{{ events.count }} Event{{ events.count|pluralize }} found</span>
+    </div>
+
+    {% if events %}
+        <div class="events-grid">
+            {% for event in events %}
+                <article class="event-card {% if event.is_past %}past-event{% endif %}">
+                    <div class="card-image-wrapper">
+                        {% if event.image_url %}
+                            <img src="{{ event.image_url }}" alt="{{ event.title }}" loading="lazy" class="card-img">
+                        {% else %}
+                            <div class="card-img-placeholder {{ event.category.slug|default:'default' }}">
+                                <i class="bi {{ event.category.icon|default:'bi-calendar-event' }}"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-category-tag">
+                            <i class="bi {{ event.category.icon|default:'bi-tag-fill' }}"></i> {{ event.category.name|default:"General" }}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-meta">
+                            <span class="card-date"><i class="bi bi-calendar3"></i> {{ event.date|date:"d M Y" }}</span>
+                            <span class="card-time"><i class="bi bi-clock"></i> {{ event.time|time:"H:i" }}</span>
+                        </div>
+                        <h3 class="card-title"><a href="{% url 'event_detail' event.slug %}">{{ event.title }}</a></h3>
+                        <p class="card-location"><i class="bi bi-geo-alt-fill"></i> {{ event.location }}</p>
+                        
+                        <!-- Capacity Status -->
+                        <div class="card-capacity-container">
+                            <div class="capacity-bar-wrapper">
+                                <!-- calculate percentage -->
+                                <div class="capacity-bar" style="width: {{ event.occupancy_percentage }}%"></div>
+                            </div>
+                            <div class="capacity-text">
+                                <span>{{ event.registered_count }}/{{ event.capacity }} Booked</span>
+                                {% if event.is_past %}
+                                    <span class="badge badge-expired">Ended</span>
+                                {% elif event.is_full %}
+                                    <span class="badge badge-full">Sold Out</span>
+                                {% else %}
+                                    <span class="badge badge-spots">{{ event.available_spots }} Spots Left</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'event_detail' event.slug %}" class="btn-card-action">
+                            View Details <i class="bi bi-arrow-right-short"></i>
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon"><i class="bi bi-calendar-x"></i></div>
+            <h3>No events found</h3>
+            <p>Try searching for different keywords or changing your active filters.</p>
+            <a href="{% url 'home' %}" class="btn-primary">Reset Filters</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

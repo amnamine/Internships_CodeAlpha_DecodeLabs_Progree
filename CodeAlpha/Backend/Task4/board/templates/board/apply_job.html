@@ -1,0 +1,51 @@
+{% extends 'board/base.html' %}
+
+{% block title %}Apply for {{ job.title }} - CareerPulse{% endblock %}
+
+{% block content %}
+<div style="margin-top: 2rem;">
+    <a href="{% url 'job_detail' job.pk %}" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-weight: 500; margin-bottom: 1.5rem;" class="nav-link">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Back to Job Details
+    </a>
+</div>
+
+<div class="auth-wrapper" style="padding: 2rem 0;">
+    <div class="auth-card" style="max-width: 600px;">
+        <h2 class="auth-title" style="text-align: left;">Apply for Role</h2>
+        <p class="auth-subtitle" style="text-align: left; margin-bottom: 1.5rem;">
+            Submitting application to <strong>{{ job.employer.employer_profile.company_name }}</strong> for <strong>{{ job.title }}</strong>.
+        </p>
+        
+        <form method="POST" action="{% url 'apply_job' job.pk %}" class="auth-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Cover Letter -->
+            <div class="form-group">
+                <label for="cover_letter">Cover Letter / Pitch</label>
+                <textarea name="cover_letter" id="cover_letter" rows="8" class="input-field" required style="resize: vertical;" placeholder="Introduce yourself and explain why you're a great fit for this role..."></textarea>
+            </div>
+            
+            <!-- Resume CV File -->
+            <div class="form-group">
+                <label for="resume">Upload Resume / CV (PDF or Word)</label>
+                {% if cand_profile.resume %}
+                    <p style="font-size: 0.85rem; color: var(--color-success); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.25rem;">
+                        <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Currently saved resume will be used.
+                    </p>
+                {% endif %}
+                <input type="file" name="resume" id="resume" class="input-field" {% if not cand_profile.resume %}required{% endif %}>
+                <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                    Supported formats: PDF, DOCX, DOC. Max size 5MB.
+                </span>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <a href="{% url 'job_detail' job.pk %}" class="btn btn-secondary" style="flex: 1;">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="flex: 2;">
+                    Submit Application <i data-lucide="send"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'board/base.html' %}
+
+{% block title %}Register - CareerPulse{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Join us to post opportunities or apply for jobs</p>
+        
+        <form method="POST" action="{% url 'register' %}" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="input-field" required placeholder="Pick a username">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" name="email" id="email" class="input-field" required placeholder="name@example.com">
+            </div>
+
+            <!-- Role Selector -->
+            <div class="form-group">
+                <label for="role-select">I want to register as a:</label>
+                <select name="role" id="role-select" class="input-field">
+                    <option value="candidate">Job Seeker (Candidate)</option>
+                    <option value="employer">Employer / Company Representative</option>
+                </select>
+            </div>
+
+            <!-- Common Name Fields -->
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" id="first_name" class="input-field" placeholder="John">
+            </div>
+
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" id="last_name" class="input-field" placeholder="Doe">
+            </div>
+
+            <!-- Employer-Specific Fields -->
+            <div id="employer-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" name="company_name" id="company_name" class="input-field" placeholder="TechCorp Inc.">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="input-field" required placeholder="Choose a password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%;">
+                <i data-lucide="user-plus"></i> Sign Up
+            </button>
+        </form>
+        
+        <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+            Already have an account? <a href="{% url 'login' %}" style="color: var(--color-primary); font-weight: 600;">Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

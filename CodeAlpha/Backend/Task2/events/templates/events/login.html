@@ -1,0 +1,50 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Login | Eventora{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Log in to access your dashboard and claim event tickets.</p>
+        </div>
+
+        <form method="POST" class="custom-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <p class="error-msg"><i class="bi bi-exclamation-circle-fill"></i> {{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group {% if field.errors %}has-errors{% endif %}">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <div class="field-control-wrapper">
+                        <!-- We customize Django authentication fields dynamic classes using custom-login-input class -->
+                        <input type="{% if field.name == 'password' %}password{% else %}text{% endif %}" 
+                               name="{{ field.html_name }}" 
+                               id="{{ field.id_for_label }}" 
+                               placeholder="{% if field.name == 'password' %}Enter your password{% else %}Username{% endif %}"
+                               class="form-input" 
+                               required>
+                    </div>
+                    {% for error in field.errors %}
+                        <p class="error-msg"><i class="bi bi-exclamation-circle-fill"></i> {{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-primary btn-auth-submit">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign up for free</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

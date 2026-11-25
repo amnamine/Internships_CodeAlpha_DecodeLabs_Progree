@@ -1,0 +1,113 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Dashboard | Eventora{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="welcome-box">
+            <h1>Welcome back, <span class="gradient-text">{{ user.first_name|default:user.username }}</span></h1>
+            <p>Manage your registrations, view ticket codes, or host your own premium events.</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'create_event' %}" class="btn-primary"><i class="bi bi-calendar-plus"></i> Host a New Event</a>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <!-- My Booked Tickets / Registrations -->
+        <section class="dashboard-section registrations-section">
+            <div class="section-title-bar">
+                <h2><i class="bi bi-ticket-perforated"></i> My Tickets</h2>
+                <span class="count-badge">{{ registrations.count }} RSVP{{ registrations.count|pluralize }}</span>
+            </div>
+
+            {% if registrations %}
+                <div class="dashboard-list">
+                    {% for reg in registrations %}
+                        <div class="dashboard-item ticket-item">
+                            <div class="item-visual {{ reg.event.category.slug|default:'default' }}">
+                                <i class="bi {{ reg.event.category.icon|default:'bi-calendar' }}"></i>
+                            </div>
+                            <div class="item-details">
+                                <span class="item-category">{{ reg.event.category.name|default:"General" }}</span>
+                                <h3 class="item-title"><a href="{% url 'event_detail' reg.event.slug %}">{{ reg.event.title }}</a></h3>
+                                <div class="item-meta">
+                                    <span><i class="bi bi-calendar3"></i> {{ reg.event.date|date:"d M Y" }}</span>
+                                    <span><i class="bi bi-geo-alt"></i> {{ reg.event.location }}</span>
+                                </div>
+                            </div>
+                            <div class="item-ticket-info">
+                                <div class="ticket-badge">
+                                    <span class="ticket-label">TICKET CODE</span>
+                                    <span class="ticket-number">{{ reg.ticket_code }}</span>
+                                </div>
+                                <form method="POST" action="{% url 'cancel_registration' reg.event.slug %}" class="ajax-cancel-form" data-title="{{ reg.event.title }}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-cancel-link" title="Cancel Registration">
+                                        <i class="bi bi-x-circle-fill"></i> Cancel RSVP
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="dashboard-empty-state">
+                    <div class="empty-icon"><i class="bi bi-ticket-detailed"></i></div>
+                    <h3>No tickets claimed</h3>
+                    <p>You haven't registered for any events yet. Head over to the home page to find your next experience.</p>
+                    <a href="{% url 'home' %}" class="btn-secondary">Browse Events</a>
+                </div>
+            {% endif %}
+        </section>
+
+        <!-- Events I am Hosting -->
+        <section class="dashboard-section hosting-section">
+            <div class="section-title-bar">
+                <h2><i class="bi bi-megaphone"></i> Hosted Events</h2>
+                <span class="count-badge">{{ organized_events.count }} Hosted</span>
+            </div>
+
+            {% if organized_events %}
+                <div class="dashboard-list">
+                    {% for event in organized_events %}
+                        <div class="dashboard-item host-item">
+                            <div class="item-details">
+                                <h3 class="item-title"><a href="{% url 'event_detail' event.slug %}">{{ event.title }}</a></h3>
+                                <div class="item-meta">
+                                    <span><i class="bi bi-calendar3"></i> {{ event.date|date:"d M Y" }}</span>
+                                    <span><i class="bi bi-people"></i> {{ event.registered_count }}/{{ event.capacity }} RSVP'd</span>
+                                </div>
+                                <!-- Progress bar for occupancy -->
+                                <div class="item-progress-wrapper">
+                                    <div class="item-progress" style="width: {{ event.occupancy_percentage }}%"></div>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <a href="{% url 'edit_event' event.slug %}" class="btn-edit-action" title="Edit Event">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <form method="POST" action="{% url 'delete_event' event.slug %}" class="confirm-delete-form" data-title="{{ event.title }}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-delete-action" title="Delete Event">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="dashboard-empty-state">
+                    <div class="empty-icon"><i class="bi bi-calendar-plus"></i></div>
+                    <h3>Hosting no events</h3>
+                    <p>Want to organize your own workshop, conference, or meetup? Create one now!</p>
+                    <a href="{% url 'create_event' %}" class="btn-secondary">Host Event</a>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}

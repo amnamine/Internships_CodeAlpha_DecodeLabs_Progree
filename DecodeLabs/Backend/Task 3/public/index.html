@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Auth System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+    </div>
+
+    <div class="container" id="auth-container">
+        <div class="card glass">
+            <h1 id="form-title">Login</h1>
+            <p id="form-subtitle">Welcome back to the secure portal</p>
+            
+            <form id="auth-form">
+                <div class="input-group">
+                    <input type="text" id="username" required placeholder=" ">
+                    <label for="username">Username</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" required placeholder=" ">
+                    <label for="password">Password</label>
+                </div>
+                
+                <div class="error-message" id="error-message"></div>
+                
+                <button type="submit" class="btn" id="submit-btn">Login</button>
+            </form>
+            
+            <p class="toggle-text">
+                <span id="toggle-prompt">Don't have an account?</span> 
+                <button type="button" class="btn-link" id="toggle-btn">Register</button>
+            </p>
+        </div>
+    </div>
+
+    <div class="container hidden" id="dashboard-container">
+        <div class="card glass dashboard-card">
+            <h1>Dashboard</h1>
+            <div class="user-info">
+                <p>Welcome, <strong id="dash-username">User</strong>!</p>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-outline" id="fetch-protected-btn">Fetch Secret Data</button>
+                <button class="btn btn-danger" id="logout-btn">Logout</button>
+            </div>
+            
+            <div class="secret-data-display hidden" id="secret-data-display">
+                <h3>Protected Data</h3>
+                <p id="secret-message"></p>
+                <div class="secret-content" id="secret-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

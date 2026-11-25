@@ -1,0 +1,194 @@
+{% extends 'board/base.html' %}
+
+{% block title %}Employer Dashboard - CareerPulse{% endblock %}
+
+{% block content %}
+<div style="margin: 2rem 0;">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem;">Employer Portal</h1>
+    <p style="color: var(--text-secondary);">Manage your company listings, view applicants, and track recruitment progress.</p>
+</div>
+
+<!-- Stats Row -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i data-lucide="briefcase"></i>
+        </div>
+        <div>
+            <div class="stat-number">{{ total_jobs }}</div>
+            <div class="stat-label">Active Jobs</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i data-lucide="users"></i>
+        </div>
+        <div>
+            <div class="stat-number">{{ total_apps }}</div>
+            <div class="stat-label">Total Applications</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon" style="background-color: var(--color-warning-bg); color: var(--color-warning);">
+            <i data-lucide="clock"></i>
+        </div>
+        <div>
+            <div class="stat-number">{{ pending_apps }}</div>
+            <div class="stat-label">Pending Review</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background-color: var(--color-success-bg); color: var(--color-success);">
+            <i data-lucide="award"></i>
+        </div>
+        <div>
+            <div class="stat-number">{{ shortlisted_apps }}</div>
+            <div class="stat-label">Shortlisted</div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    
+    <!-- Received Applications Section -->
+    <div class="details-card" style="padding: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="inbox" style="color: var(--color-primary);"></i> Candidate Applications
+        </h2>
+
+        {% csrf_token %}
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 750px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+                        <th style="padding: 1rem 0.5rem;">Candidate</th>
+                        <th style="padding: 1rem 0.5rem;">Position</th>
+                        <th style="padding: 1rem 0.5rem;">Applied Date</th>
+                        <th style="padding: 1rem 0.5rem;">Resume / Cover Letter</th>
+                        <th style="padding: 1rem 0.5rem;">Status Badge</th>
+                        <th style="padding: 1rem 0.5rem; text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applications %}
+                        <tr style="border-bottom: 1px solid var(--border-color); font-size: 0.95rem;">
+                            <!-- Candidate Name -->
+                            <td style="padding: 1.25rem 0.5rem;">
+                                <strong style="color: var(--text-primary);">
+                                    {{ app.candidate.get_full_name|default:app.candidate.username }}
+                                </strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ app.candidate.email }}</div>
+                            </td>
+                            <!-- Position -->
+                            <td style="padding: 1.25rem 0.5rem;">
+                                <a href="{% url 'job_detail' app.job.pk %}" style="color: var(--color-primary); font-weight: 500;">
+                                    {{ app.job.title }}
+                                </a>
+                            </td>
+                            <!-- Applied Date -->
+                            <td style="padding: 1.25rem 0.5rem; color: var(--text-secondary);">
+                                {{ app.applied_at|date:"M d, Y" }}
+                            </td>
+                            <!-- Resume & Cover Letter -->
+                            <td style="padding: 1.25rem 0.5rem;">
+                                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                                    {% if app.resume %}
+                                        <a href="{{ app.resume.url }}" download class="btn btn-secondary btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                            <i data-lucide="download" style="width: 12px; height: 12px;"></i> CV
+                                        </a>
+                                    {% else %}
+                                        <span style="font-size: 0.75rem; color: var(--text-muted);">No CV</span>
+                                    {% endif %}
+                                    
+                                    {% if app.cover_letter %}
+                                        <button onclick="alert('Cover Letter from {{ app.candidate.username }}:\n\n{{ app.cover_letter|escapejs }}')" class="btn btn-secondary btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                            <i data-lucide="file-text" style="width: 12px; height: 12px;"></i> View Pitch
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <!-- Status Badge -->
+                            <td style="padding: 1.25rem 0.5rem;">
+                                <span id="badge-{{ app.pk }}" class="status-badge status-{{ app.status }}">
+                                    {{ app.get_status_display }}
+                                </span>
+                            </td>
+                            <!-- Select Action -->
+                            <td style="padding: 1.25rem 0.5rem; text-align: right;">
+                                <select class="status-select input-field" data-app-id="{{ app.pk }}" style="padding: 0.35rem 0.5rem; font-size: 0.85rem; width: auto; display: inline-block;">
+                                    {% for code, label in status_choices %}
+                                        <option value="{{ code }}" {% if app.status == code %}selected{% endif %}>
+                                            Mark: {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 3rem 0; color: var(--text-muted);">
+                                No applications received yet.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Active Listings Section -->
+    <div class="details-card" style="padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.35rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                <i data-lucide="layers" style="color: var(--color-primary);"></i> My Posted Jobs
+            </h2>
+            <a href="{% url 'post_job' %}" class="btn btn-primary btn-sm">
+                <i data-lucide="plus"></i> Add New Job
+            </a>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 600px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+                        <th style="padding: 1rem 0.5rem;">Job Title</th>
+                        <th style="padding: 1rem 0.5rem;">Location</th>
+                        <th style="padding: 1rem 0.5rem;">Type</th>
+                        <th style="padding: 1rem 0.5rem;">Date Posted</th>
+                        <th style="padding: 1rem 0.5rem;">Applications</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                        <tr style="border-bottom: 1px solid var(--border-color); font-size: 0.95rem;">
+                            <td style="padding: 1rem 0.5rem;">
+                                <a href="{% url 'job_detail' job.pk %}" style="font-weight: 600; color: var(--text-primary);">
+                                    {{ job.title }}
+                                </a>
+                            </td>
+                            <td style="padding: 1rem 0.5rem; color: var(--text-secondary);">{{ job.location }}</td>
+                            <td style="padding: 1rem 0.5rem;">
+                                <span class="badge badge-{{ job.job_type }}">{{ job.get_job_type_display }}</span>
+                            </td>
+                            <td style="padding: 1rem 0.5rem; color: var(--text-secondary);">{{ job.created_at|date:"M d, Y" }}</td>
+                            <td style="padding: 1rem 0.5rem;">
+                                <span style="font-weight: 700; color: var(--color-primary);">{{ job.applications.count }}</span>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 3rem 0; color: var(--text-muted);">
+                                No jobs posted yet. Click "Add New Job" to post your first position.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

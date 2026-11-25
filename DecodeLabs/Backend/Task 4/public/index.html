@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Weather - World's Best Meteorological Platform</title>
+    <meta name="description" content="Ultimate Weather Platform">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-day">
+    <!-- Dynamic background elements -->
+    <div class="bg-elements">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="weather-effects" id="weather-effects"></div>
+    </div>
+
+    <!-- Header Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c2.5 0 4.5-2 4.5-4.5S20 10 17.5 10c-.3 0-.6 0-.8.1A6.9 6.9 0 0 0 4.4 12.3 4.5 4.5 0 0 0 4.5 21h13Z"></path></svg>
+                <span>Lumina Weather</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#about-platform">About Platform</a></li>
+                <li><a href="#">API Documentation</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        
+        <!-- Welcome Section (Landing State) -->
+        <div id="landing-state" class="landing-state">
+            <div class="welcome-text">
+                <h1 id="greeting">Welcome to Lumina!</h1>
+                <p>Experience the world's most advanced and beautifully designed meteorological platform. Start by searching for a city, or explore global hotspots.</p>
+            </div>
+
+            <!-- Search Header (Centered initially) -->
+            <header class="top-bar">
+                <form id="weather-form" class="search-form">
+                    <div class="input-wrapper">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="city-input" placeholder="Search for any city worldwide..." autocomplete="off" required>
+                        <div id="history-dropdown" class="history-dropdown hidden"></div>
+                    </div>
+                </form>
+            </header>
+
+            <div class="suggestions-section">
+                <h3>Popular Destinations</h3>
+                <div class="suggestions-grid">
+                    <div class="suggestion-card" data-city="Tokyo">
+                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=80" alt="Tokyo">
+                        <span>Tokyo</span>
+                    </div>
+                    <div class="suggestion-card" data-city="New York">
+                        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400&q=80" alt="New York">
+                        <span>New York</span>
+                    </div>
+                    <div class="suggestion-card" data-city="London">
+                        <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&q=80" alt="London">
+                        <span>London</span>
+                    </div>
+                    <div class="suggestion-card" data-city="Paris">
+                        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=80" alt="Paris">
+                        <span>Paris</span>
+                    </div>
+                </div>
+            </div>
+
+            <section id="about-platform" class="about-platform">
+                <h2>Why Lumina is the Worldwide Best 🌍</h2>
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <h3>Hyper-Accurate Data</h3>
+                        <p>Powered by advanced Open-Meteo modeling, delivering precision forecasts, AQI, and UV indexes instantly.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3>Premium UI/UX</h3>
+                        <p>Award-winning glassmorphism design with immersive animations and dynamic time-of-day themes.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3>Bento Box Dashboard</h3>
+                        <p>All your critical meteorological data visualized beautifully in a dense, scannable dashboard format.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dashboard State (Hidden initially) -->
+        <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
+            <!-- Search Header (Moves to top during active search) -->
+            <header class="top-bar compact-search">
+                <form id="weather-form-active" class="search-form">
+                    <div class="input-wrapper">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="city-input-active" placeholder="Search another city..." autocomplete="off">
+                    </div>
+                </form>
+            </header>
+
+            <!-- Loader -->
+            <div id="loader" class="loader-container hidden">
+                <div class="loader-ring"></div>
+                <span>Analyzing atmosphere...</span>
+            </div>
+
+            <div id="error-message" class="error-message hidden"></div>
+
+            <!-- Dashboard Grid -->
+            <main id="dashboard" class="dashboard hidden">
+                <!-- Hero Card -->
+                <section class="bento-box hero-card">
+                    <div class="hero-top">
+                        <h1 id="city-name">--</h1>
+                        <p id="date-current">--</p>
+                    </div>
+                    <div class="hero-main">
+                        <img id="main-icon" src="" class="main-icon" alt="Weather">
+                        <div class="temp-display">
+                            <span id="main-temp">--</span>°
+                        </div>
+                    </div>
+                    <div class="hero-bottom">
+                        <p id="main-desc">--</p>
+                        <p class="feels-like">Feels like <span id="feels-like">--</span>°</p>
+                    </div>
+                </section>
+
+                <!-- Hourly Forecast -->
+                <section class="bento-box hourly-card">
+                    <div class="card-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <h3>Hourly Forecast</h3>
+                    </div>
+                    <div class="hourly-scroll" id="hourly-container"></div>
+                </section>
+
+                <!-- Weekly Forecast -->
+                <section class="bento-box weekly-card">
+                    <div class="card-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <h3>7-Day Forecast</h3>
+                    </div>
+                    <div class="weekly-list" id="weekly-container"></div>
+                </section>
+
+                <!-- Metrics Grid -->
+                <section class="metrics-container">
+                    <div class="bento-box metric-card">
+                        <h4>Air Quality</h4>
+                        <div class="metric-value"><span id="aqi-val">--</span></div>
+                        <div class="metric-desc">AQI Index</div>
+                    </div>
+                    <div class="bento-box metric-card">
+                        <h4>UV Index</h4>
+                        <div class="metric-value"><span id="uv-val">--</span></div>
+                        <div class="metric-desc">Max Today</div>
+                    </div>
+                    <div class="bento-box metric-card">
+                        <h4>Wind</h4>
+                        <div class="metric-value"><span id="wind-val">--</span> <small>m/s</small></div>
+                    </div>
+                    <div class="bento-box metric-card">
+                        <h4>Humidity</h4>
+                        <div class="metric-value"><span id="humidity-val">--</span>%</div>
+                    </div>
+                    <div class="bento-box metric-card">
+                        <h4>Pressure</h4>
+                        <div class="metric-value"><span id="pressure-val">--</span> <small>hPa</small></div>
+                    </div>
+                    <div class="bento-box metric-card">
+                        <h4>Sun</h4>
+                        <div class="sun-times">
+                            <p>⬆ <span id="sunrise">--:--</span></p>
+                            <p>⬇ <span id="sunset">--:--</span></p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="main-footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c2.5 0 4.5-2 4.5-4.5S20 10 17.5 10c-.3 0-.6 0-.8.1A6.9 6.9 0 0 0 4.4 12.3 4.5 4.5 0 0 0 4.5 21h13Z"></path></svg>
+                <span>Lumina Weather</span>
+                <p>Empowering you with the world's most beautiful and accurate meteorological insights.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                </div>
+                <div class="link-group">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Lumina Global Weather Corp. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

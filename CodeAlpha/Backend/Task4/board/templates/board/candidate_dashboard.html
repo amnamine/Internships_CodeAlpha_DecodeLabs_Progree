@@ -1,0 +1,117 @@
+{% extends 'board/base.html' %}
+
+{% block title %}Candidate Dashboard - CareerPulse{% endblock %}
+
+{% block content %}
+<div style="margin: 2rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem;">Candidate Portal</h1>
+        <p style="color: var(--text-secondary);">Manage your profile, skills, uploaded CV, and track your submitted applications.</p>
+    </div>
+    <a href="{% url 'profile' %}" class="btn btn-primary">
+        <i data-lucide="edit"></i> Edit Profile
+    </a>
+</div>
+
+<div class="job-detail-grid">
+    <!-- Left Column: Biography, Resume, and Skills -->
+    <div class="details-card">
+        <div class="profile-section">
+            <h2 class="profile-section-title">Professional Bio</h2>
+            <p style="color: var(--text-secondary); line-height: 1.6; white-space: pre-line;">
+                {{ cand_profile.bio|default:"No bio added yet. Add one by clicking 'Edit Profile'!" }}
+            </p>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="profile-section-title">Skills & Competencies</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                {% for skill in skills_list %}
+                    <span class="badge" style="background-color: var(--color-primary-glow); color: var(--color-primary); font-size: 0.85rem; padding: 0.35rem 0.85rem;">
+                        {{ skill }}
+                    </span>
+                {% empty %}
+                    <span style="color: var(--text-muted); font-style: italic;">No skills listed yet.</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="profile-section-title">Education History</h2>
+            <p style="color: var(--text-secondary); line-height: 1.6; white-space: pre-line;">
+                {{ cand_profile.education|default:"No education details provided yet." }}
+            </p>
+        </div>
+
+        <div class="profile-section" style="margin-bottom: 0;">
+            <h2 class="profile-section-title">Work Experience</h2>
+            <p style="color: var(--text-secondary); line-height: 1.6; white-space: pre-line;">
+                {{ cand_profile.experience|default:"No experience details provided yet." }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Right Column: Timeline tracker and Resume info -->
+    <div class="company-sidebar">
+        <!-- CV / Resume Status Card -->
+        <div class="sidebar-card">
+            <h3 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i data-lucide="file" style="color: var(--color-primary);"></i> My Resume / CV
+            </h3>
+            {% if cand_profile.resume %}
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                    Your CV is uploaded and ready for employer applications.
+                </p>
+                <a href="{{ cand_profile.resume.url }}" download class="btn btn-secondary" style="width: 100%;">
+                    <i data-lucide="download"></i> Download CV
+                </a>
+            {% else %}
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; font-style: italic;">
+                    No resume uploaded. Please upload a resume before applying.
+                </p>
+                <a href="{% url 'profile' %}" class="btn btn-primary" style="width: 100%;">
+                    Upload CV Now
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Application Status Timeline -->
+        <div class="sidebar-card" style="padding: 1.5rem 1.25rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i data-lucide="trending-up" style="color: var(--color-primary);"></i> Track Applications
+            </h3>
+            
+            <div class="timeline">
+                {% for app in applications %}
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+                            <div style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">
+                                <h4 style="font-size: 0.95rem; font-weight: 600; margin: 0;">
+                                    <a href="{% url 'job_detail' app.job.pk %}" style="color: var(--text-primary); hover: color: var(--color-primary);">
+                                        {{ app.job.title }}
+                                    </a>
+                                </h4>
+                                <span class="status-badge status-{{ app.status }}" style="font-size: 0.7rem; margin-top: -2px;">
+                                    {{ app.get_status_display }}
+                                </span>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); width: 100%; display: flex; justify-content: space-between;">
+                                <span>{{ app.job.employer.employer_profile.company_name }}</span>
+                                <span style="color: var(--text-muted);">{{ app.applied_at|date:"M d" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div style="text-align: center; padding: 2rem 0; color: var(--text-muted); font-size: 0.9rem;">
+                        No applications submitted yet.
+                        <a href="{% url 'index' %}" style="color: var(--color-primary); font-weight: 600; display: block; margin-top: 0.5rem;">
+                            Browse jobs <i data-lucide="arrow-right" style="width: 12px; height: 12px; display: inline-block;"></i>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

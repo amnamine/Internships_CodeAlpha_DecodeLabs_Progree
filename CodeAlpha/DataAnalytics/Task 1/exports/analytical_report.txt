@@ -1,0 +1,39 @@
+============================================================
+             DATA ANALYSIS SUMMARY REPORT
+============================================================
+Total Books Scraped: 40
+Average Book Rating: 3.05 / 5.0
+Total Stock Available: 754 items
+------------------------------------------------------------
+Price Statistics (Excl. Tax):
+  - Average Price: £34.96
+  - Median Price:  £34.08
+  - Maximum Price: £57.25
+  - Minimum Price: £12.84
+------------------------------------------------------------
+Top 5 Most Expensive Books:
+  - £57.25 | Our Band Could Be Your Life: Scenes from the American Indie Underground, 1981-1991 (Category: Music)
+  - £54.64 | Birdsong: A Story in Pictures (Category: Childrens)
+  - £54.23 | Sapiens: A Brief History of Humankind (Category: History)
+  - £53.74 | Tipping the Velvet (Category: Historical Fiction)
+  - £53.13 | Aladdin and His Wonderful Lamp (Category: Default)
+------------------------------------------------------------
+Top 5 Cheapest Books:
+  - £12.84 | In Her Wake (Category: Thriller)
+  - £13.99 | Starving Hearts (Triangular Trade Trilogy, #1) (Category: Default)
+  - £15.94 | Sophie's World (Category: Philosophy)
+  - £17.46 | Set Me Free (Category: Young Adult)
+  - £17.66 | The Four Agreements: A Practical Guide to Personal Freedom (Category: Spirituality)
+------------------------------------------------------------
+Books Count by Category (Top 10):
+  - Default                   : 7 books (Avg Price: £25.92)
+  - Poetry                    : 5 books (Avg Price: £36.42)
+  - Music                     : 3 books (Avg Price: £43.20)
+  - Thriller                  : 3 books (Avg Price: £29.63)
+  - Mystery                   : 2 books (Avg Price: £33.73)
+  - Nonfiction                : 2 books (Avg Price: £35.67)
+  - Childrens                 : 2 books (Avg Price: £45.77)
+  - Romance                   : 2 books (Avg Price: £29.90)
+  - Young Adult               : 2 books (Avg Price: £20.05)
+  - History                   : 1 books (Avg Price: £54.23)
+============================================================

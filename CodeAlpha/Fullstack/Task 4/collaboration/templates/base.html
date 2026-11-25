@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CoSync - Real-Time Collaboration{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo">
+            <span class="logo-icon"><i class="fa-solid fa-circle-nodes"></i></span>
+            <span class="logo-text">Co<span class="highlight">Sync</span></span>
+        </div>
+        <nav class="nav-links">
+            {% if user.is_authenticated %}
+                <span class="user-badge">
+                    <span class="avatar" style="background-color: {{ user.profile.avatar_color }};">
+                        {{ user.username|slice:":1"|upper }}
+                    </span>
+                    <span class="username">{{ user.username }}</span>
+                </span>
+                <a href="{% url 'dashboard' %}" class="btn btn-text"><i class="fa-solid fa-chart-simple"></i> Dashboard</a>
+                <a href="{% url 'logout' %}" class="btn btn-outline btn-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-text">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="app-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 CoSync collaboration platform. End-to-End Encrypted (E2EE) WebRTC technology.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

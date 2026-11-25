@@ -1,0 +1,177 @@
+{% extends 'events/base.html' %}
+
+{% block title %}{{ event.title }} | Eventora{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <!-- Back to events link -->
+    <div class="back-nav">
+        <a href="{% url 'home' %}" class="btn-back"><i class="bi bi-arrow-left"></i> Back to Events</a>
+    </div>
+
+    <!-- Event Hero Header -->
+    <header class="detail-hero">
+        <div class="detail-hero-overlay"></div>
+        {% if event.image_url %}
+            <img src="{{ event.image_url }}" alt="{{ event.title }}" class="detail-hero-img">
+        {% else %}
+            <div class="detail-hero-placeholder {{ event.category.slug|default:'default' }}">
+                <i class="bi {{ event.category.icon|default:'bi-calendar-event' }}"></i>
+            </div>
+        {% endif %}
+        
+        <div class="detail-hero-content">
+            <span class="detail-badge"><i class="bi {{ event.category.icon|default:'bi-tag-fill' }}"></i> {{ event.category.name|default:"General" }}</span>
+            <h1 class="detail-title">{{ event.title }}</h1>
+            <div class="detail-quick-meta">
+                <span><i class="bi bi-geo-alt-fill"></i> {{ event.location }}</span>
+                <span><i class="bi bi-calendar3"></i> {{ event.date|date:"l, d F Y" }}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Grid -->
+    <div class="detail-grid">
+        <!-- Main Event Info -->
+        <section class="detail-main">
+            <div class="detail-card description-card">
+                <h2>About the Event</h2>
+                <div class="description-content">
+                    {{ event.description|linebreaks }}
+                </div>
+            </div>
+
+            <div class="detail-card info-card">
+                <h2>Event Details</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="bi bi-calendar-event-fill"></i></div>
+                        <div class="info-text">
+                            <h3>Date</h3>
+                            <p>{{ event.date|date:"d F Y" }}</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="bi bi-clock-fill"></i></div>
+                        <div class="info-text">
+                            <h3>Time</h3>
+                            <p>{{ event.time|time:"H:i" }} UTC</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div class="info-text">
+                            <h3>Location</h3>
+                            <p>{{ event.location }}</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="bi bi-person-fill-check"></i></div>
+                        <div class="info-text">
+                            <h3>Host</h3>
+                            <p>{{ event.organizer.first_name|default:event.organizer.username }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sidebar Widget -->
+        <aside class="detail-sidebar">
+            <!-- Countdown Widget -->
+            {% if not event.is_past %}
+            <div class="sidebar-card countdown-card" id="countdown-widget" data-date="{{ event.date|date:'Y-m-d' }}" data-time="{{ event.time|time:'H:i:s' }}">
+                <h3>Starts In</h3>
+                <div class="countdown-timer">
+                    <div class="countdown-unit">
+                        <span class="number" id="days">00</span>
+                        <span class="label">Days</span>
+                    </div>
+                    <div class="countdown-unit">
+                        <span class="number" id="hours">00</span>
+                        <span class="label">Hrs</span>
+                    </div>
+                    <div class="countdown-unit">
+                        <span class="number" id="minutes">00</span>
+                        <span class="label">Mins</span>
+                    </div>
+                    <div class="countdown-unit">
+                        <span class="number" id="seconds">00</span>
+                        <span class="label">Secs</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Registration Widget -->
+            <div class="sidebar-card booking-card">
+                <h3>Ticket & Booking</h3>
+                
+                <div class="capacity-status">
+                    <div class="status-gauge">
+                        <div class="gauge-fill" style="width: {{ event.occupancy_percentage }}%"></div>
+                    </div>
+                    <div class="status-labels">
+                        <span>{{ event.registered_count }} Registered</span>
+                        <span>{{ event.capacity }} Capacity</span>
+                    </div>
+                </div>
+
+                <div class="booking-price-tier">
+                    <span class="price-type">Admission Pass</span>
+                    <span class="price-amount">Free</span>
+                </div>
+
+                <div class="booking-action-area">
+                    {% if event.is_past %}
+                        <div class="booking-notice expired">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <span>This event has already ended.</span>
+                        </div>
+                    {% else %}
+                        {% if user.is_authenticated %}
+                            {% if is_registered %}
+                                <div class="booking-notice success-booking">
+                                    <i class="bi bi-ticket-perforated-fill"></i>
+                                    <div>
+                                        <strong>You are registered!</strong>
+                                        <p class="ticket-code">Code: {{ registration.ticket_code }}</p>
+                                    </div>
+                                </div>
+                                <form method="POST" action="{% url 'cancel_registration' event.slug %}" class="ajax-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-cancel-booking btn-full-width">
+                                        <i class="bi bi-x-circle"></i> Cancel Registration
+                                    </button>
+                                </form>
+                            {% else %}
+                                {% if event.is_full %}
+                                    <div class="booking-notice full-booking">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                        <span>Fully Booked! No tickets available.</span>
+                                    </div>
+                                {% else %}
+                                    <form method="POST" action="{% url 'register_event' event.slug %}" class="ajax-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-book-ticket btn-full-width">
+                                            <i class="bi bi-qr-code"></i> Claim Free Ticket
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <div class="booking-auth-required">
+                                <p>You must be signed in to claim tickets for this event.</p>
+                                <div class="auth-buttons">
+                                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn-login-small">Login</a>
+                                    <a href="{% url 'signup' %}" class="btn-signup-small">Sign Up</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncBoard | Pro Collaborative Task Management</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Custom stylesheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark-theme">
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Auth Container -->
+    <div id="auth-container" class="auth-container active">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="brand">
+                    <span class="brand-logo"><i class="fa-solid fa-layer-group"></i></span>
+                    <span class="brand-name">SyncBoard</span>
+                </div>
+                <p class="auth-subtitle" id="auth-subtitle">Collaborate, organize, and hit deadlines in real-time.</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user input-icon"></i>
+                        <input type="text" id="login-username" placeholder="Enter username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i></button>
+                <p class="form-switch">Don't have an account? <span id="to-register">Register here</span></p>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user input-icon"></i>
+                        <input type="text" id="reg-username" placeholder="Choose a username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-envelope input-icon"></i>
+                        <input type="email" id="reg-email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="reg-password" placeholder="Create secure password" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Create Account <i class="fa-solid fa-user-plus ml-2"></i></button>
+                <p class="form-switch">Already have an account? <span id="to-login">Log in here</span></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- App Dashboard Container (Hidden by default) -->
+    <div id="app-container" class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <span class="brand-logo"><i class="fa-solid fa-layer-group"></i></span>
+                    <span class="brand-name">SyncBoard</span>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-section-header">
+                        <span>Projects</span>
+                        <button id="btn-create-project-trigger" class="btn-icon" title="Create New Project">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                    <ul id="project-list" class="project-list">
+                        <!-- Projects loaded dynamically -->
+                        <div class="loader-spinner"></div>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div id="user-avatar" class="user-avatar">US</div>
+                    <div class="user-info">
+                        <span id="user-display-name" class="user-name">Username</span>
+                        <span id="user-display-email" class="user-email">user@email.com</span>
+                    </div>
+                    <div class="notification-trigger-container">
+                        <button id="btn-notifications-trigger" class="btn-icon" title="Notifications">
+                            <i class="fa-regular fa-bell"></i>
+                            <span id="noti-badge" class="noti-badge hide">0</span>
+                        </button>
+                    </div>
+                </div>
+                <button id="btn-logout" class="btn btn-outline btn-block mt-3">
+                    <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Contents -->
+        <main class="workspace">
+            
+            <!-- Dashboard Main Banner (No Project Selected) -->
+            <div id="dashboard-welcome" class="welcome-screen active">
+                <div class="welcome-content">
+                    <div class="welcome-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                    <h1>Welcome to SyncBoard</h1>
+                    <p>Select an existing project from the sidebar, or create a brand new workspace to start collaborating in real-time with your team.</p>
+                    <button id="btn-welcome-create-project" class="btn btn-primary">
+                        <i class="fa-solid fa-circle-plus"></i> Create First Project
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Project Board View -->
+            <div id="project-workspace" class="project-workspace">
+                <header class="workspace-header">
+                    <div class="project-title-area">
+                        <h2 id="current-project-name">Project Title</h2>
+                        <p id="current-project-desc" class="project-desc">Description of the project goes here.</p>
+                    </div>
+                    <div class="project-actions-area">
+                        <div class="members-list-wrapper">
+                            <span class="label-text">Team Members:</span>
+                            <div id="project-members-avatars" class="members-avatars">
+                                <!-- Member circles loaded here -->
+                            </div>
+                            <button id="btn-invite-member-trigger" class="btn btn-sm btn-outline">
+                                <i class="fa-solid fa-user-plus"></i> Invite
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Kanban Board Grid -->
+                <div class="kanban-grid">
+                    <!-- TODO Column -->
+                    <div class="kanban-column" data-status="Todo">
+                        <div class="column-header">
+                            <span class="col-title"><span class="indicator todo"></span> To Do</span>
+                            <span id="count-todo" class="task-count">0</span>
+                        </div>
+                        <div class="task-cards-container" id="tasks-todo" ondragover="allowDrop(event)" ondrop="drop(event, 'Todo')">
+                            <!-- Tasks cards -->
+                        </div>
+                        <button class="btn btn-ghost btn-add-task-trigger" data-status="Todo">
+                            <i class="fa-solid fa-plus"></i> Add task
+                        </button>
+                    </div>
+
+                    <!-- IN PROGRESS Column -->
+                    <div class="kanban-column" data-status="In Progress">
+                        <div class="column-header">
+                            <span class="col-title"><span class="indicator progress"></span> In Progress</span>
+                            <span id="count-progress" class="task-count">0</span>
+                        </div>
+                        <div class="task-cards-container" id="tasks-progress" ondragover="allowDrop(event)" ondrop="drop(event, 'In Progress')">
+                            <!-- Tasks cards -->
+                        </div>
+                        <button class="btn btn-ghost btn-add-task-trigger" data-status="In Progress">
+                            <i class="fa-solid fa-plus"></i> Add task
+                        </button>
+                    </div>
+
+                    <!-- IN REVIEW Column -->
+                    <div class="kanban-column" data-status="Review">
+                        <div class="column-header">
+                            <span class="col-title"><span class="indicator review"></span> In Review</span>
+                            <span id="count-review" class="task-count">0</span>
+                        </div>
+                        <div class="task-cards-container" id="tasks-review" ondragover="allowDrop(event)" ondrop="drop(event, 'Review')">
+                            <!-- Tasks cards -->
+                        </div>
+                        <button class="btn btn-ghost btn-add-task-trigger" data-status="Review">
+                            <i class="fa-solid fa-plus"></i> Add task
+                        </button>
+                    </div>
+
+                    <!-- DONE Column -->
+                    <div class="kanban-column" data-status="Done">
+                        <div class="column-header">
+                            <span class="col-title"><span class="indicator done"></span> Done</span>
+                            <span id="count-done" class="task-count">0</span>
+                        </div>
+                        <div class="task-cards-container" id="tasks-done" ondragover="allowDrop(event)" ondrop="drop(event, 'Done')">
+                            <!-- Tasks cards -->
+                        </div>
+                        <button class="btn btn-ghost btn-add-task-trigger" data-status="Done">
+                            <i class="fa-solid fa-plus"></i> Add task
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- Create Project Modal -->
+    <div id="modal-create-project" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Create New Project</h3>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="form-create-project">
+                <div class="form-group">
+                    <label for="new-project-name">Project Name</label>
+                    <input type="text" id="new-project-name" placeholder="e.g. Website Redesign" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-project-desc">Description</label>
+                    <textarea id="new-project-desc" rows="3" placeholder="Describe the goal of this workspace..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Workspace</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invite Member Modal -->
+    <div id="modal-invite-member" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Invite Team Member</h3>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="form-invite-member">
+                <div class="form-group">
+                    <label for="invite-username">Member Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-at input-icon"></i>
+                        <input type="text" id="invite-username" placeholder="Type username" required autocomplete="off">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div id="modal-task-details" class="modal-overlay">
+        <div class="modal-card task-detail-card">
+            <div class="modal-header">
+                <div class="task-title-group">
+                    <input type="text" id="task-detail-title" class="input-title-edit" placeholder="Task Title">
+                    <div class="task-meta-breadcrumbs">
+                        <span id="task-detail-project-name">Project Name</span> / <span id="task-detail-status-badge" class="badge">Todo</span>
+                    </div>
+                </div>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="task-detail-body">
+                <!-- Left side details (Settings & Info) -->
+                <div class="task-main-fields">
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="task-detail-assignee"><i class="fa-regular fa-user mr-1"></i> Assignee</label>
+                            <select id="task-detail-assignee">
+                                <option value="">Unassigned</option>
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="task-detail-priority"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Priority</label>
+                            <select id="task-detail-priority">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-detail-due"><i class="fa-regular fa-calendar-days mr-1"></i> Due Date</label>
+                        <input type="date" id="task-detail-due">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-detail-desc"><i class="fa-solid fa-bars-staggered mr-1"></i> Description</label>
+                        <textarea id="task-detail-desc" rows="4" placeholder="Add a detailed description for this task..."></textarea>
+                    </div>
+
+                    <div class="task-action-buttons">
+                        <button id="btn-save-task-details" class="btn btn-primary"><i class="fa-solid fa-check"></i> Save Changes</button>
+                        <button id="btn-delete-task" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete Task</button>
+                    </div>
+                </div>
+
+                <!-- Right side communication (Comments) -->
+                <div class="task-comments-section">
+                    <h3><i class="fa-regular fa-comments mr-2"></i> Activity & Comments</h3>
+                    
+                    <div id="comments-container" class="comments-container">
+                        <!-- Comments listed here -->
+                    </div>
+
+                    <form id="form-add-comment" class="comment-input-form">
+                        <div class="user-avatar" id="comment-form-avatar">ME</div>
+                        <div class="comment-input-wrapper">
+                            <textarea id="new-comment-content" placeholder="Write a comment..." rows="1" required></textarea>
+                            <button type="submit" class="btn-send"><i class="fa-regular fa-paper-plane"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide-out Notifications Panel -->
+    <div id="notifications-panel" class="notifications-panel">
+        <div class="noti-header">
+            <h3>Notifications</h3>
+            <div class="noti-actions">
+                <button id="btn-mark-all-read" class="btn btn-xs btn-ghost">Mark all read</button>
+                <button id="btn-close-notifications" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div id="notifications-list" class="notifications-list">
+            <!-- Notifications list -->
+            <div class="no-notifications">No new updates.</div>
+        </div>
+    </div>
+
+    <!-- Socket.IO library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+    <!-- App script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

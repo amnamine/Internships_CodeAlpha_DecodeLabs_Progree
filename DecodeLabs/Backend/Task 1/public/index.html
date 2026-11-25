@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REST API Fundamentals Playground</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-background"></div>
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/>
+          </svg>
+        </div>
+        <h1>REST API Fundamentals</h1>
+      </div>
+      <div class="header-status">
+        <span class="status-indicator-dot" id="server-status-dot"></span>
+        <span id="server-status-text">Checking Server...</span>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-workspace">
+      
+      <!-- Left Column: Guide & Learning Info -->
+      <section class="workspace-column guide-panel">
+        <div class="card card-glow">
+          <h2>REST Core Concepts</h2>
+          <p class="guide-subtitle">Understand how stateless web servers communicate using HTTP.</p>
+          
+          <div class="concept-tabs">
+            <button class="tab-btn active" data-concept="http-methods">HTTP Methods</button>
+            <button class="tab-btn" data-concept="routing">Routing Logic</button>
+            <button class="tab-btn" data-concept="stateless">Statelessness</button>
+          </div>
+
+          <div class="concept-content active" id="concept-http-methods">
+            <h3>GET vs POST</h3>
+            <p>HTTP defines standard methods to express intent on server resources.</p>
+            <ul class="concept-list">
+              <li>
+                <span class="method-tag get-tag">GET</span>
+                <strong>Retrieve data:</strong> Safe, idempotent, and cacheable. Requests should never modify server state.
+              </li>
+              <li>
+                <span class="method-tag post-tag">POST</span>
+                <strong>Submit data:</strong> Non-idempotent. Creates or processes a new resource using JSON in the request body.
+              </li>
+            </ul>
+          </div>
+
+          <div class="concept-content" id="concept-routing">
+            <h3>Routing Logic</h3>
+            <p>Routes map HTTP methods and URI paths to specific controller actions on the server.</p>
+            <div class="route-map">
+              <div class="route-item">
+                <span class="get-tag">GET</span>
+                <code>/api/items</code>
+                <span class="route-desc">Fetch list of items</span>
+              </div>
+              <div class="route-item">
+                <span class="get-tag">GET</span>
+                <code>/api/items/:id</code>
+                <span class="route-desc">Fetch item details</span>
+              </div>
+              <div class="route-item">
+                <span class="post-tag">POST</span>
+                <code>/api/items</code>
+                <span class="route-desc">Create new item</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="concept-content" id="concept-stateless">
+            <h3>Stateless constraint</h3>
+            <p>Every request from client to server must contain all the information necessary to understand and process the request.</p>
+            <div class="info-alert">
+              <svg viewBox="0 0 24 24" width="18" height="18" class="alert-icon">
+                <path fill="currentColor" d="M11,9H13V7H11V9M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/>
+              </svg>
+              <span>The server does not store active session tokens or states; it simply processes input and responds.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Templates Card -->
+        <div class="card templates-card">
+          <h3>Interactive Scenarios</h3>
+          <p class="section-desc">Select a preset scenario to populate the API Console.</p>
+          <div class="template-grid">
+            <button class="template-btn" id="tpl-get-all">
+              <span class="badge get-badge">GET</span>
+              <span class="tpl-name">Get All Items</span>
+            </button>
+            <button class="template-btn" id="tpl-get-single">
+              <span class="badge get-badge">GET</span>
+              <span class="tpl-name">Get Item #1</span>
+            </button>
+            <button class="template-btn" id="tpl-get-404">
+              <span class="badge get-badge">GET</span>
+              <span class="tpl-name">Get Invalid Item (404)</span>
+            </button>
+            <button class="template-btn" id="tpl-post-valid">
+              <span class="badge post-badge">POST</span>
+              <span class="tpl-name">Create Item (Valid)</span>
+            </button>
+            <button class="template-btn" id="tpl-post-invalid">
+              <span class="badge post-badge">POST</span>
+              <span class="tpl-name">Create Item (Invalid 400)</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: API Console -->
+      <section class="workspace-column console-panel">
+        
+        <!-- Interactive Request Builder -->
+        <div class="card request-builder-card">
+          <div class="card-header">
+            <span class="badge-dot"></span>
+            <h2>API Console</h2>
+          </div>
+          
+          <div class="request-bar">
+            <select id="request-method" class="select-input">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+            </select>
+            <span class="url-domain">/api</span>
+            <input type="text" id="request-path" class="text-input" value="/items">
+            <button id="send-request-btn" class="btn btn-primary">
+              <span>Send Request</span>
+              <div class="btn-ripple"></div>
+            </button>
+          </div>
+
+          <!-- POST Request Body Editor -->
+          <div class="request-body-section" id="request-body-container">
+            <div class="section-label">
+              <span>Request Body (JSON)</span>
+              <span id="json-validity" class="validity-indicator valid">Valid JSON</span>
+            </div>
+            <textarea id="request-body" class="code-editor" spellcheck="false">{
+  "name": "HTTP Headers",
+  "description": "Metadata key-value pairs sent with request or response.",
+  "category": "HTTP Concept"
+}</textarea>
+          </div>
+        </div>
+
+        <!-- Request visualizer flow -->
+        <div class="req-flow-container">
+          <div class="flow-node node-client">
+            <div class="node-icon">💻</div>
+            <span>Client</span>
+          </div>
+          <div class="flow-line">
+            <div class="flow-packet" id="packet"></div>
+          </div>
+          <div class="flow-node node-server">
+            <div class="node-icon">☁️</div>
+            <span>Server</span>
+          </div>
+        </div>
+
+        <!-- Interactive Response Viewer -->
+        <div class="card response-viewer-card">
+          <div class="card-header">
+            <h3>Response Details</h3>
+            <div class="response-meta">
+              <span class="status-badge" id="response-status">---</span>
+              <span class="time-badge" id="response-time">0ms</span>
+            </div>
+          </div>
+
+          <div class="response-tabs">
+            <button class="resp-tab-btn active" data-resp="body">Response Body</button>
+            <button class="resp-tab-btn" data-resp="headers">Headers</button>
+          </div>
+
+          <!-- Body Output -->
+          <div class="response-content active" id="resp-content-body">
+            <pre><code id="response-body-output" class="language-json">{
+  "info": "Press 'Send Request' to trigger an HTTP round-trip."
+}</code></pre>
+          </div>
+
+          <!-- Headers Output -->
+          <div class="response-content" id="resp-content-headers">
+            <table class="headers-table">
+              <thead>
+                <tr>
+                  <th>Header Key</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="response-headers-output">
+                <tr>
+                  <td colspan="2" class="table-placeholder">No headers received yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

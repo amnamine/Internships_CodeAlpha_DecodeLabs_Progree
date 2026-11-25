@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CareerPulse - Premium Job Board Platform{% endblock %}</title>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'index' %}" class="nav-logo">
+                <i data-lucide="briefcase"></i> CareerPulse
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}" class="nav-link">Find Jobs</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a></li>
+                    {% if user.profile.role == 'employer' %}
+                        <li><a href="{% url 'post_job' %}" class="nav-link">Post Job</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+                    <li><span class="nav-link" style="opacity: 0.7;">Hi, {{ user.username }}</span></li>
+                    <li><a href="{% url 'logout' %}" class="btn btn-secondary btn-sm">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+                    <li><a href="{% url 'register' %}" class="btn btn-primary btn-sm">Register</a></li>
+                {% endif %}
+                <li>
+                    <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle Theme">
+                        <i data-lucide="sun"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="container" style="flex: 1;">
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 CareerPulse. Built with Python, Django, SQLite, and custom CSS variables. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Initialize Lucide icons on page load
+        lucide.createIcons();
+    </script>
+</body>
+</html>

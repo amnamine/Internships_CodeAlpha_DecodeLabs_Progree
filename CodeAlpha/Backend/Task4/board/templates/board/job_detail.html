@@ -1,0 +1,130 @@
+{% extends 'board/base.html' %}
+
+{% block title %}{{ job.title }} - CareerPulse{% endblock %}
+
+{% block content %}
+<div style="margin-top: 2rem;">
+    <a href="{% url 'index' %}" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-weight: 500; margin-bottom: 1.5rem;" class="nav-link">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Back to Jobs
+    </a>
+</div>
+
+<div class="job-detail-grid">
+    <!-- Main Info Section -->
+    <div class="details-card">
+        <span style="color: var(--color-primary); font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+            {{ job.employer.employer_profile.company_name }}
+        </span>
+        <h1 style="font-size: 2.25rem; font-weight: 700; margin: 0.5rem 0 1rem; line-height: 1.2;">
+            {{ job.title }}
+        </h1>
+        
+        <div class="job-card-meta" style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem;">
+            <div class="meta-item">
+                <i data-lucide="map-pin"></i> {{ job.location }}
+            </div>
+            {% if job.salary_range %}
+                <div class="meta-item">
+                    <i data-lucide="dollar-sign"></i> {{ job.salary_range }}
+                </div>
+            {% endif %}
+            <div class="meta-item">
+                <i data-lucide="clock"></i> Posted {{ job.created_at|date:"F d, Y" }}
+            </div>
+            <div class="meta-item">
+                <span class="badge badge-{{ job.job_type }}">
+                    {{ job.get_job_type_display }}
+                </span>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 2.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Job Description</h3>
+            <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-line;">
+                {{ job.description }}
+            </p>
+        </div>
+
+        {% if requirements %}
+            <div>
+                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Key Requirements</h3>
+                <ul class="requirements-list">
+                    {% for req in requirements %}
+                        <li>{{ req }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Company and Action Sidebar -->
+    <div class="company-sidebar">
+        <!-- Application Actions -->
+        <div class="sidebar-card">
+            <h3 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1.25rem;">Apply for this Position</h3>
+            
+            {% if user.is_authenticated %}
+                {% if user.profile.role == 'employer' %}
+                    <div style="background-color: var(--border-color); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; text-align: center; color: var(--text-secondary);">
+                        Employers cannot apply for job listings.
+                    </div>
+                {% else %}
+                    {% if has_applied %}
+                        <div style="background-color: var(--color-success-bg); border: 1px solid var(--color-success); padding: 1rem; border-radius: var(--radius-sm); text-align: center; margin-bottom: 1rem;">
+                            <p style="font-weight: 600; color: var(--color-success); margin-bottom: 0.25rem;">Application Submitted</p>
+                            <span class="status-badge status-{{ application_status|lower }}" style="font-size: 0.8rem;">
+                                Status: {{ application_status }}
+                            </span>
+                        </div>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="width: 100%;">
+                            Track in Dashboard <i data-lucide="layout-dashboard"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'apply_job' job.pk %}" class="btn btn-primary" style="width: 100%;">
+                            Apply Now <i data-lucide="send"></i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}?next={% url 'job_detail' job.pk %}" class="btn btn-primary" style="width: 100%; margin-bottom: 0.75rem;">
+                    Login to Apply
+                </a>
+                <p style="font-size: 0.8rem; text-align: center; color: var(--text-muted);">
+                    Don't have an account? <a href="{% url 'register' %}" style="color: var(--color-primary); font-weight: 600;">Sign up free</a>
+                </p>
+            {% endif %}
+        </div>
+
+        <!-- Company details sidebar -->
+        <div class="sidebar-card">
+            <h3 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem;">About the Company</h3>
+            <h4 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.75rem;">
+                {{ job.employer.employer_profile.company_name }}
+            </h4>
+            
+            {% if job.employer.employer_profile.description %}
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.25rem;">
+                    {{ job.employer.employer_profile.description }}
+                </p>
+            {% endif %}
+            
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
+                {% if job.employer.employer_profile.location %}
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="map-pin" style="width: 16px; height: 16px;"></i>
+                        <span>{{ job.employer.employer_profile.location }}</span>
+                    </div>
+                {% endif %}
+                {% if job.employer.employer_profile.website %}
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="globe" style="width: 16px; height: 16px;"></i>
+                        <a href="{{ job.employer.employer_profile.website }}" target="_blank" style="color: var(--color-primary); hover: underline;">
+                            Visit Website <i data-lucide="external-link" style="width: 12px; height: 12px; display: inline;"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

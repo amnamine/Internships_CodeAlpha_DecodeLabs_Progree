@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ room.name }} - CoSync{% endblock %}
+
+{% block content %}
+<div class="workspace-container">
+    <!-- Left Column: Video Feeds & Controls -->
+    <div class="media-column">
+        <div class="room-header-bar">
+            <div class="room-title-info">
+                <h2>{{ room.name }}</h2>
+                <div class="e2ee-status">
+                    <i class="fa-solid fa-lock text-success animate-pulse"></i>
+                    <span>E2EE Encrypted</span>
+                </div>
+            </div>
+            <div class="room-code-tag" onclick="navigator.clipboard.writeText('{{ room.code }}'); alert('Room Code Copied!')" title="Click to copy Room Code">
+                <span>Code: <code>{{ room.code }}</code></span>
+                <i class="fa-regular fa-copy"></i>
+            </div>
+        </div>
+
+        <!-- Video Grid -->
+        <div class="video-grid" id="videoGrid">
+            <!-- Local User Video Element -->
+            <div class="video-tile local-tile" id="localTile" style="border-color: {{ user_color }};">
+                <video id="localVideo" autoplay playsinline muted></video>
+                <div class="tile-tag">
+                    <span class="user-avatar-dot" style="background-color: {{ user_color }};"></span>
+                    <span class="tile-username">You ({{ username }})</span>
+                </div>
+                <div class="audio-indicator" id="localAudioIndicator">
+                    <i class="fa-solid fa-microphone"></i>
+                </div>
+            </div>
+            <!-- Remote videos will be appended here dynamically -->
+        </div>
+
+        <!-- Control Bar -->
+        <div class="control-bar">
+            <button class="control-btn" id="btnMic" title="Toggle Microphone">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            <button class="control-btn" id="btnCam" title="Toggle Camera">
+                <i class="fa-solid fa-video"></i>
+            </button>
+            <button class="control-btn" id="btnScreen" title="Share Screen">
+                <i class="fa-solid fa-desktop"></i>
+            </button>
+            <a href="{% url 'dashboard' %}" class="control-btn btn-danger" id="btnLeave" title="Leave Workspace">
+                <i class="fa-solid fa-phone-slash"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Right Column: Collaborative Tools (Tabs) -->
+    <div class="collab-column">
+        <div class="tab-header">
+            <button class="tab-btn active" data-tab="tab-whiteboard">
+                <i class="fa-solid fa-pen-ruler"></i> Board
+            </button>
+            <button class="tab-btn" data-tab="tab-chat">
+                <i class="fa-solid fa-comments"></i> Chat
+            </button>
+            <button class="tab-btn" data-tab="tab-files">
+                <i class="fa-solid fa-folder-open"></i> Files
+            </button>
+        </div>
+
+        <div class="tab-content">
+            <!-- TAB: WHITEBOARD -->
+            <div class="tab-pane active" id="tab-whiteboard">
+                <div class="whiteboard-wrapper">
+                    <!-- Tool Controls -->
+                    <div class="whiteboard-tools">
+                        <div class="tool-section">
+                            <span class="tool-label">Colors:</span>
+                            <div class="color-palette">
+                                <button class="color-swatch active" style="background-color: #ffffff;" data-color="#ffffff"></button>
+                                <button class="color-swatch" style="background-color: #f43f5e;" data-color="#f43f5e"></button>
+                                <button class="color-swatch" style="background-color: #10b981;" data-color="#10b981"></button>
+                                <button class="color-swatch" style="background-color: #3b82f6;" data-color="#3b82f6"></button>
+                                <button class="color-swatch" style="background-color: #f59e0b;" data-color="#f59e0b"></button>
+                                <button class="color-swatch" style="background-color: #ec4899;" data-color="#ec4899"></button>
+                                <input type="color" id="customColorPicker" title="Custom Color">
+                            </div>
+                        </div>
+
+                        <div class="tool-section">
+                            <span class="tool-label">Size:</span>
+                            <select id="penSize" class="select-tool">
+                                <option value="2">Thin (2px)</option>
+                                <option value="5" selected>Medium (5px)</option>
+                                <option value="10">Thick (10px)</option>
+                                <option value="20">Marker (20px)</option>
+                            </select>
+                        </div>
+
+                        <div class="tool-section btn-actions">
+                            <button id="btnClearBoard" class="btn btn-outline btn-xs" title="Clear entire whiteboard"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas -->
+                    <div class="canvas-container">
+                        <canvas id="whiteboardCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: CHAT -->
+            <div class="tab-pane" id="tab-chat">
+                <div class="chat-wrapper">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="system-message">Welcome to your secure chat. Type a message below to begin.</div>
+                    </div>
+                    <form id="chatForm" class="chat-input-area">
+                        <input type="text" id="chatInput" placeholder="Send an encrypted message..." autocomplete="off" required>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB: FILES -->
+            <div class="tab-pane" id="tab-files">
+                <div class="files-wrapper">
+                    <div class="file-drop-zone" id="fileDropZone">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p>Drag & drop file here or click to upload</p>
+                        <input type="file" id="fileInput" style="display: none;">
+                        <div class="upload-progress-bar" id="uploadProgressBar" style="display:none;"><div class="progress-fill"></div></div>
+                    </div>
+                    
+                    <div class="shared-files-section">
+                        <h4>Shared Resources</h4>
+                        <div class="shared-files-list" id="sharedFilesList">
+                            {% if files %}
+                                {% for shared in files %}
+                                    <div class="file-item">
+                                        <div class="file-info">
+                                            <i class="fa-solid fa-file-lines text-muted"></i>
+                                            <div class="file-meta">
+                                                <a href="{{ shared.file.url }}" target="_blank" class="file-name" download>{{ shared.filename }}</a>
+                                                <small>Shared by {{ shared.sender.username }} • {{ shared.uploaded_at|date:"H:i" }}</small>
+                                            </div>
+                                        </div>
+                                        <a href="{{ shared.file.url }}" download class="btn-download" title="Download"><i class="fa-solid fa-download"></i></a>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-files" id="emptyFilesMessage">
+                                    <p>No files uploaded yet in this meeting.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inject variables into Javascript safely -->
+<script>
+    const ROOM_CODE = "{{ room.code }}";
+    const CURRENT_USER = "{{ username }}";
+    const USER_COLOR = "{{ user_color }}";
+    const SIGNALING_SEND_URL = "{% url 'send_signal' room.code %}";
+    const SIGNALING_GET_URL = "{% url 'get_signals' room.code %}";
+    const FILE_UPLOAD_URL = "{% url 'upload_file' room.code %}";
+</script>
+
+<!-- Scripts -->
+<script src="{% static 'js/whiteboard.js' %}"></script>
+<script src="{% static 'js/room.js' %}"></script>
+{% endblock %}

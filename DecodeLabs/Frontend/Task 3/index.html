@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 3 - Next-Gen Interactive Web Elements Showcase</title>
+  <meta name="description" content="An exquisite, ultra-interactive showcase demonstrating advanced JavaScript DOM manipulation, dynamic content rendering, custom theme switching, real-time widget sandbox, and responsive UI.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Interactive Canvas -->
+  <canvas id="particleCanvas"></canvas>
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Header Navigation -->
+  <header class="navbar-header navbar-glass">
+    <div class="nav-container">
+      <a href="#" class="brand-logo">
+        <div class="logo-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+        <span class="logo-text">Task3<span class="text-accent">.Interactive</span></span>
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <a href="#explorer" class="nav-link active"><i class="fa-solid fa-compass"></i> Explorer</a>
+        <a href="#sandbox" class="nav-link"><i class="fa-solid fa-sliders"></i> UI Sandbox</a>
+        <a href="#tasks" class="nav-link"><i class="fa-solid fa-list-check"></i> Task Hub</a>
+        <a href="#quiz" class="nav-link"><i class="fa-solid fa-brain"></i> Quiz Lab</a>
+        <a href="#toasts" class="nav-link"><i class="fa-solid fa-bell"></i> Alerts</a>
+        <a href="#gallery" class="nav-link"><i class="fa-solid fa-images"></i> Gallery</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Live Clock -->
+        <div class="live-clock" id="liveClock" title="Current Local Time">
+          <i class="fa-regular fa-clock"></i> <span id="clockText">00:00:00</span>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button class="icon-btn theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme">
+          <i class="fa-solid fa-moon moon-icon"></i>
+          <i class="fa-solid fa-sun sun-icon"></i>
+        </button>
+
+        <!-- Sound FX Toggle -->
+        <button class="icon-btn sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Audio Feedback" title="Sound Feedback Toggle">
+          <i class="fa-solid fa-volume-high sound-on"></i>
+          <i class="fa-solid fa-volume-xmark sound-off hidden"></i>
+        </button>
+
+        <!-- Mobile Menu Hamburger -->
+        <button class="mobile-hamburger" id="mobileMenuBtn" aria-label="Open Navigation Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-content">
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="badge-pill">
+          <span class="badge-dot"></span>
+          <span>DecodeLabs Frontend Task 3</span>
+        </div>
+        <h1 class="hero-title">
+          Mastering <span class="gradient-text">Interactive DOM</span> & Web Elements
+        </h1>
+        <p class="hero-subtitle">
+          Experience real-time state manipulation, dynamic item generation, live color & shadow style generators, dynamic search filters, interactive quizzes, and custom notification systems.
+        </p>
+
+        <!-- Interactive Stats Counter Bar -->
+        <div class="hero-stats-grid">
+          <div class="stat-card" id="statInteractions">
+            <div class="stat-icon"><i class="fa-solid fa-hand-pointer"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="counterInteractions">0</span>
+              <span class="stat-label">DOM Clicks</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="counterItems">8</span>
+              <span class="stat-label">Active Cards</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-check-double"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="counterCompleted">0</span>
+              <span class="stat-label">Tasks Done</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+            <div class="stat-info">
+              <span class="stat-value" id="counterScore">0</span>
+              <span class="stat-label">Quiz Points</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-buttons">
+          <a href="#explorer" class="btn btn-primary btn-glow">
+            <i class="fa-solid fa-rocket"></i> Explore Elements
+          </a>
+          <button class="btn btn-secondary" id="triggerRandomToastBtn">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Test Quick Alert
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: Dynamic Data & Card Explorer -->
+    <section class="content-section" id="explorer">
+      <div class="section-header">
+        <div class="section-tag"><i class="fa-solid fa-filter"></i> Dynamic Manipulation</div>
+        <h2 class="section-title">Interactive Card & Data Hub</h2>
+        <p class="section-desc">Search, filter by technology category, sort dynamically, toggle layout view, or create new dynamic items on the fly!</p>
+      </div>
+
+      <!-- Controls Panel -->
+      <div class="controls-bar glass-card">
+        <!-- Search Box -->
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search cards by name or tag..." aria-label="Search items">
+          <button class="clear-search-btn hidden" id="clearSearchBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="filter-pills" id="filterPills">
+          <button class="pill-btn active" data-filter="all">All Tech</button>
+          <button class="pill-btn" data-filter="frontend">Frontend</button>
+          <button class="pill-btn" data-filter="backend">Backend</button>
+          <button class="pill-btn" data-filter="uiux">UI/UX Design</button>
+          <button class="pill-btn" data-filter="tools">Dev Tools</button>
+        </div>
+
+        <!-- Extra Actions -->
+        <div class="controls-right">
+          <!-- Sort Dropdown -->
+          <div class="custom-select-wrapper">
+            <select id="sortSelect" aria-label="Sort cards">
+              <option value="name-asc">Sort: A to Z</option>
+              <option value="name-desc">Sort: Z to A</option>
+              <option value="likes-desc">Sort: Most Liked</option>
+              <option value="likes-asc">Sort: Least Liked</option>
+            </select>
+          </div>
+
+          <!-- View Switcher -->
+          <div class="view-toggle">
+            <button class="view-btn active" id="viewGridBtn" title="Grid View"><i class="fa-solid fa-grid-2"></i></button>
+            <button class="view-btn" id="viewListBtn" title="List View"><i class="fa-solid fa-list"></i></button>
+          </div>
+
+          <!-- Add Item Button -->
+          <button class="btn btn-primary btn-sm" id="openAddModalBtn">
+            <i class="fa-solid fa-plus"></i> Add Card
+          </button>
+        </div>
+      </div>
+
+      <!-- Cards Grid Container -->
+      <div class="cards-grid grid-layout" id="cardsGrid">
+        <!-- Injected via JavaScript dynamically -->
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state hidden" id="cardsEmptyState">
+        <i class="fa-solid fa-ghost empty-icon"></i>
+        <h3>No matching cards found</h3>
+        <p>Try adjusting your search query or selected category filter.</p>
+        <button class="btn btn-secondary btn-sm" id="resetFiltersBtn"><i class="fa-solid fa-rotate-left"></i> Reset Filters</button>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Interactive Real-Time UI Sandbox -->
+    <section class="content-section" id="sandbox">
+      <div class="section-header">
+        <div class="section-tag"><i class="fa-solid fa-sliders"></i> Real-time CSS Customizer</div>
+        <h2 class="section-title">Live Dynamic Style Sandbox</h2>
+        <p class="section-desc">Adjust sliders and toggles to manipulate DOM style properties live. Copy your generated CSS code with one click!</p>
+      </div>
+
+      <div class="sandbox-container glass-card">
+        <!-- Controls Side -->
+        <div class="sandbox-controls">
+          <h3 class="sandbox-subtitle"><i class="fa-solid fa-gears"></i> Property Controls</h3>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Card Background Gradient</span>
+              <span class="value-badge" id="valColorMode">Cyber Pulse</span>
+            </div>
+            <div class="preset-colors">
+              <button class="color-preset active" data-gradient="linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4))" style="background: linear-gradient(135deg, #6366f1, #a855f7);"></button>
+              <button class="color-preset" data-gradient="linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(6, 182, 212, 0.4))" style="background: linear-gradient(135deg, #10b981, #06b6d4);"></button>
+              <button class="color-preset" data-gradient="linear-gradient(135deg, rgba(244, 63, 94, 0.4), rgba(251, 146, 60, 0.4))" style="background: linear-gradient(135deg, #f43f5e, #fb923c);"></button>
+              <button class="color-preset" data-gradient="linear-gradient(135deg, rgba(236, 72, 153, 0.4), rgba(139, 92, 246, 0.4))" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);"></button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Border Radius</span>
+              <span class="value-badge" id="valRadius">20px</span>
+            </div>
+            <input type="range" id="inputRadius" min="0" max="50" value="20" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Glow Blur Radius</span>
+              <span class="value-badge" id="valGlow">30px</span>
+            </div>
+            <input type="range" id="inputGlow" min="0" max="60" value="30" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Backdrop Blur</span>
+              <span class="value-badge" id="valBlur">16px</span>
+            </div>
+            <input type="range" id="inputBlur" min="0" max="40" value="16" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Rotation Angle</span>
+              <span class="value-badge" id="valRotate">0deg</span>
+            </div>
+            <input type="range" id="inputRotate" min="-180" max="180" value="0" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Scale Factor</span>
+              <span class="value-badge" id="valScale">1.0x</span>
+            </div>
+            <input type="range" id="inputScale" min="0.5" max="1.3" step="0.05" value="1.0" class="range-slider">
+          </div>
+
+          <div class="sandbox-toggles">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggleBorder" checked>
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">Neon Border Glow</span>
+            </label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="togglePulse">
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">Continuous Pulse Anim</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Preview Side -->
+        <div class="sandbox-preview">
+          <h3 class="sandbox-subtitle"><i class="fa-solid fa-eye"></i> Live Target Element</h3>
+
+          <div class="preview-stage">
+            <div class="sandbox-target-card" id="sandboxTargetCard">
+              <div class="target-badge"><i class="fa-solid fa-wand-magic"></i> Live DOM Node</div>
+              <h4 id="sandboxCardTitle">Exquisite Glass Container</h4>
+              <p>Manipulate slider handles on the left to watch CSS variables compute in real-time!</p>
+              <div class="target-action-row">
+                <button class="btn btn-primary btn-sm" id="sandboxClickBtn"><i class="fa-solid fa-heart"></i> Dynamic Ripple</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Code Box -->
+          <div class="code-generator">
+            <div class="code-header">
+              <span><i class="fa-solid fa-code"></i> Dynamic Generated CSS</span>
+              <button class="copy-code-btn" id="copyCssBtn"><i class="fa-solid fa-copy"></i> Copy CSS</button>
+            </div>
+            <pre><code id="generatedCssCode">/* Generated CSS will render here */</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Dynamic Task & Goal Tracker -->
+    <section class="content-section" id="tasks">
+      <div class="section-header">
+        <div class="section-tag"><i class="fa-solid fa-list-check"></i> State & DOM Management</div>
+        <h2 class="section-title">Interactive Task & Checklist Manager</h2>
+        <p class="section-desc">Add tasks dynamically, toggle progress status, filter view state, and enjoy smooth DOM insertions & removals.</p>
+      </div>
+
+      <div class="task-app-wrapper glass-card">
+        <!-- Input Row -->
+        <form class="task-input-form" id="taskForm">
+          <div class="input-with-icon">
+            <i class="fa-solid fa-plus-circle"></i>
+            <input type="text" id="taskInput" placeholder="Enter a new interactive task or goal..." required autocomplete="off">
+          </div>
+          <select id="taskPriority" aria-label="Task Priority">
+            <option value="high">High Priority</option>
+            <option value="medium" selected>Medium Priority</option>
+            <option value="low">Low Priority</option>
+          </select>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Task</button>
+        </form>
+
+        <!-- Progress Bar -->
+        <div class="task-progress-box">
+          <div class="progress-info">
+            <span>Overall Completion Progress</span>
+            <span id="taskProgressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="taskProgressFill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Task Filter & Action Header -->
+        <div class="task-filter-bar">
+          <div class="task-tabs">
+            <button class="task-tab active" data-status="all">All Tasks (<span id="countAll">0</span>)</button>
+            <button class="task-tab" data-status="active">Pending (<span id="countActive">0</span>)</button>
+            <button class="task-tab" data-status="completed">Done (<span id="countCompleted">0</span>)</button>
+          </div>
+          <button class="btn btn-text btn-sm" id="clearCompletedTasksBtn"><i class="fa-solid fa-trash-can"></i> Clear Completed</button>
+        </div>
+
+        <!-- Task List Items -->
+        <ul class="task-list" id="taskList">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Interactive Quiz & Dynamic Score Evaluator -->
+    <section class="content-section" id="quiz">
+      <div class="section-header">
+        <div class="section-tag"><i class="fa-solid fa-brain"></i> Interactive Gamification</div>
+        <h2 class="section-title">JavaScript & DOM Quiz Engine</h2>
+        <p class="section-desc">Test your JavaScript knowledge with real-time feedback, interactive options, animated progress step tracker, and score calculation!</p>
+      </div>
+
+      <div class="quiz-container glass-card">
+        <div id="quizMainContent">
+          <div class="quiz-header-bar">
+            <div class="quiz-step-badge">Question <span id="quizCurrentStep">1</span> of <span id="quizTotalSteps">5</span></div>
+            <div class="quiz-score-badge"><i class="fa-solid fa-trophy"></i> Score: <span id="quizCurrentScore">0</span></div>
+          </div>
+
+          <div class="quiz-progress-line">
+            <div class="quiz-progress-inner" id="quizProgressInner" style="width: 20%;"></div>
+          </div>
+
+          <h3 class="quiz-question-text" id="quizQuestionText">Loading Question...</h3>
+
+          <div class="quiz-options-grid" id="quizOptionsGrid">
+            <!-- Dynamic option buttons inserted via script -->
+          </div>
+
+          <div class="quiz-feedback-box hidden" id="quizFeedbackBox">
+            <div class="feedback-icon" id="feedbackIcon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="feedback-text" id="feedbackText">Correct! DOM stands for Document Object Model.</div>
+          </div>
+
+          <div class="quiz-footer-actions">
+            <button class="btn btn-secondary" id="quizPrevBtn" disabled><i class="fa-solid fa-arrow-left"></i> Previous</button>
+            <button class="btn btn-primary" id="quizNextBtn" disabled>Next Question <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Quiz Result Screen (Hidden by default) -->
+        <div class="quiz-result-screen hidden" id="quizResultScreen">
+          <div class="trophy-glow"><i class="fa-solid fa-trophy"></i></div>
+          <h3 class="result-title">Quiz Completed!</h3>
+          <p class="result-subtitle">You scored <span class="highlight-score" id="finalScoreVal">0</span> out of <span id="finalMaxScore">5</span></p>
+          <div class="result-badge-container" id="resultBadge">
+            <span class="badge badge-gold"><i class="fa-solid fa-award"></i> JavaScript Master</span>
+          </div>
+          <button class="btn btn-primary btn-glow" id="restartQuizBtn"><i class="fa-solid fa-rotate-right"></i> Retake Quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Dynamic Notifications & Toast Studio -->
+    <section class="content-section" id="toasts">
+      <div class="section-header">
+        <div class="section-tag"><i class="fa-solid fa-bell"></i> System Alert Triggers</div>
+        <h2 class="section-title">Dynamic Toast Notification Studio</h2>
+        <p class="section-desc">Trigger custom, animated toast alerts with dynamically injected HTML elements and timers.</p>
+      </div>
+
+      <div class="toast-studio glass-card">
+        <div class="toast-controls-grid">
+          <div class="form-group">
+            <label for="toastTitleInput">Notification Title</label>
+            <input type="text" id="toastTitleInput" value="DOM Update Triggered!">
+          </div>
+          <div class="form-group">
+            <label for="toastMsgInput">Message Body</label>
+            <input type="text" id="toastMsgInput" value="Successfully modified dynamic elements in real time.">
+          </div>
+          <div class="form-group">
+            <label for="toastTypeSelect">Alert Variant</label>
+            <select id="toastTypeSelect">
+              <option value="success">Success (Green)</option>
+              <option value="info" selected>Information (Blue)</option>
+              <option value="warning">Warning (Amber)</option>
+              <option value="error">Error (Rose)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="toastDurationInput">Duration (seconds)</label>
+            <input type="number" id="toastDurationInput" min="1" max="10" value="4">
+          </div>
+        </div>
+
+        <div class="toast-action-buttons">
+          <button class="btn btn-primary" id="triggerCustomToastBtn"><i class="fa-solid fa-paper-plane"></i> Dispatch Custom Toast</button>
+          <button class="btn btn-secondary" id="triggerSuccessToastBtn"><i class="fa-solid fa-check"></i> Quick Success</button>
+          <button class="btn btn-secondary" id="triggerWarningToastBtn"><i class="fa-solid fa-triangle-exclamation"></i> Quick Warning</button>
+          <button class="btn btn-secondary" id="triggerErrorToastBtn"><i class="fa-solid fa-bug"></i> Quick Error</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: Dynamic Lightbox Media Gallery -->
+    <section class="content-section" id="gallery">
+      <div class="section-header">
+        <div class="section-tag"><i class="fa-solid fa-images"></i> Dynamic Modal Gallery</div>
+        <h2 class="section-title">Interactive Showcase Gallery</h2>
+        <p class="section-desc">Click any preview card to launch an interactive DOM modal with rich descriptions, tag dynamic updates, and key navigation.</p>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Dynamic Footer -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="brand-logo">
+            <div class="logo-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+            <span class="logo-text">Task3<span class="text-accent">.Interactive</span></span>
+          </a>
+          <p class="footer-desc">Crafted with passion for DecodeLabs Internship Task 3. Powered by Vanilla JavaScript DOM Manipulation & Modern CSS3.</p>
+        </div>
+
+        <!-- Newsletter Form -->
+        <div class="footer-newsletter">
+          <h4>Subscribe for Interactive Updates</h4>
+          <form class="newsletter-form" id="newsletterForm">
+            <input type="email" id="newsletterEmail" placeholder="Enter your email address..." required>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+          </form>
+          <div class="newsletter-feedback hidden" id="newsletterFeedback"></div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Task 3 Interactive Web Elements. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Github"><i class="fa-brands fa-github"></i></a>
+          <a href="#" aria-label="Linkedin"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Codepen"><i class="fa-brands fa-codepen"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: Add New Card Modal -->
+  <div class="modal-overlay hidden" id="addCardModal">
+    <div class="modal-container glass-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-plus-circle"></i> Create New Interactive Card</h3>
+        <button class="modal-close-btn" id="closeAddModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="addCardForm" class="modal-body">
+        <div class="form-group">
+          <label for="newCardTitle">Card Title</label>
+          <input type="text" id="newCardTitle" placeholder="e.g., React Virtual DOM" required>
+        </div>
+        <div class="form-group">
+          <label for="newCardCategory">Category</label>
+          <select id="newCardCategory" required>
+            <option value="frontend">Frontend</option>
+            <option value="backend">Backend</option>
+            <option value="uiux">UI/UX Design</option>
+            <option value="tools">Dev Tools</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="newCardIcon">Icon Class (FontAwesome)</label>
+          <input type="text" id="newCardIcon" placeholder="e.g., fa-brands fa-react" value="fa-solid fa-code">
+        </div>
+        <div class="form-group">
+          <label for="newCardDesc">Description</label>
+          <textarea id="newCardDesc" rows="3" placeholder="Briefly describe this interactive element..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelAddModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Add Card to DOM</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Image Lightbox Modal -->
+  <div class="modal-overlay hidden" id="lightboxModal">
+    <div class="lightbox-container glass-card">
+      <button class="modal-close-btn lightbox-close" id="closeLightboxBtn"><i class="fa-solid fa-xmark"></i></button>
+      <div class="lightbox-content">
+        <div class="lightbox-visual">
+          <div class="lightbox-icon-preview" id="lightboxIcon"><i class="fa-solid fa-layer-group"></i></div>
+        </div>
+        <div class="lightbox-details">
+          <span class="badge" id="lightboxCategory">Frontend</span>
+          <h3 id="lightboxTitle">Modal Title</h3>
+          <p id="lightboxDescription">Detailed description goes here.</p>
+          <div class="lightbox-tags" id="lightboxTags">
+            <!-- Dynamic tags -->
+          </div>
+          <div class="lightbox-actions">
+            <button class="btn btn-primary btn-sm" id="lightboxLikeBtn"><i class="fa-regular fa-heart"></i> Like (<span id="lightboxLikeCount">0</span>)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>

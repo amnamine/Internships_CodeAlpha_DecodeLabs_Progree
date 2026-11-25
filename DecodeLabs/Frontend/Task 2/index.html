@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyberpunk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>DecodeLabs Task 2 | Next-Gen Frontend Web Experience</title>
+  <meta name="description" content="An ultra-stunning, responsive, interactive static website featuring advanced UI/UX, animations, theme customization, particle engine, live playground, and web audio effects.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Custom Cursor Elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Interactive Particle Background Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Sound Engine Controls & Floating Bar -->
+  <div class="floating-controls">
+    <button class="icon-btn" id="soundToggleBtn" aria-label="Toggle Sound Effects" title="Toggle Sound (Mute/Unmute)">
+      <span class="btn-icon">🔊</span>
+    </button>
+    <button class="icon-btn" id="cmdPaletteBtn" aria-label="Open Command Palette" title="Command Palette (Ctrl + K)">
+      <span class="btn-icon">⌘</span>
+    </button>
+    <button class="icon-btn" id="themeQuickBtn" aria-label="Quick Switch Theme" title="Cycle Theme">
+      <span class="btn-icon">🎨</span>
+    </button>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="navbar-wrapper">
+    <nav class="navbar glass-card" id="mainNav">
+      <a href="#hero" class="nav-brand">
+        <div class="brand-logo-hex">
+          <span class="hex-inner">&lt;/&gt;</span>
+        </div>
+        <span class="brand-text">Decode<span class="highlight">Labs</span></span>
+        <span class="badge-pill">Task 2</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="nav-link active">Home</a></li>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#skills" class="nav-link">Skills Matrix</a></li>
+        <li><a href="#playground" class="nav-link">Live Sandbox</a></li>
+        <li><a href="#devices" class="nav-link">Device Simulator</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Theme Selector Menu -->
+        <div class="theme-selector-dropdown">
+          <button class="theme-select-btn glass-btn" id="themeSelectDropdown">
+            <span class="theme-indicator"></span>
+            <span id="currentThemeName">Cyberpunk</span>
+            <span class="arrow-down">▾</span>
+          </button>
+          <div class="theme-menu glass-card" id="themeMenu">
+            <button class="theme-option active" data-theme="cyberpunk">⚡ Cyberpunk Neon</button>
+            <button class="theme-option" data-theme="aurora">🌌 Aurora Borealis</button>
+            <button class="theme-option" data-theme="deepspace">🚀 Deep Space</button>
+            <button class="theme-option" data-theme="matrix">🟢 Emerald Matrix</button>
+            <button class="theme-option" data-theme="pearl">✨ Pearl Light</button>
+          </div>
+        </div>
+
+        <a href="#playground" class="btn-primary glow-effect">
+          <span>Launch Sandbox</span>
+          <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button class="mobile-toggle-btn" id="mobileMenuToggle" aria-label="Toggle Navigation Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-pill-badge glowing-border">
+            <span class="pill-dot"></span>
+            <span>Frontend Task 2 • Hyper-Interactive Static Design</span>
+          </div>
+          
+          <h1 class="hero-title">
+            Crafting <span class="gradient-text animated-gradient">Unrivaled</span> Web Experiences
+          </h1>
+
+          <p class="hero-subtitle">
+            An insanely beautiful, ultra-responsive HTML5, CSS3, & JS web application with dynamic particle engine, 3D tilt effects, live code editor, theme customization, and Web Audio API interactions.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#playground" class="btn-primary btn-lg glow-effect magnetic-target">
+              <span>Explore Live Playground</span>
+              <span class="btn-pulse"></span>
+            </a>
+            <a href="#features" class="btn-secondary btn-lg glass-btn magnetic-target">
+              <span>View Features & Stack</span>
+            </a>
+          </div>
+
+          <!-- Dynamic Counter Stats -->
+          <div class="hero-stats-grid glass-card">
+            <div class="stat-card">
+              <span class="stat-number" data-target="100">0</span><span class="stat-symbol">%</span>
+              <span class="stat-label">Responsive Precision</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-card">
+              <span class="stat-number" data-target="60">0</span><span class="stat-symbol">FPS</span>
+              <span class="stat-label">Smooth Animations</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-card">
+              <span class="stat-number" data-target="5">0</span><span class="stat-symbol">+</span>
+              <span class="stat-label">Dynamic Themes</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-card">
+              <span class="stat-number" data-target="0">0</span><span class="stat-symbol">ms</span>
+              <span class="stat-label">Dependency Overhead</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Interactive Hero Card -->
+        <div class="hero-visual-wrapper">
+          <div class="tilt-card-3d glass-card glowing-border" id="heroTiltCard">
+            <div class="card-glass-shine"></div>
+            <div class="card-header-bar">
+              <div class="traffic-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <span class="card-title-text">decodelabs_task2_app.js</span>
+              <span class="card-status-badge">ONLINE</span>
+            </div>
+            <div class="card-inner-content">
+              <div class="code-snippet-preview">
+                <pre><code><span class="code-keyword">const</span> <span class="code-var">task2</span> = {
+  <span class="code-prop">project</span>: <span class="code-str">"DecodeLabs Frontend Task 2"</span>,
+  <span class="code-prop">techStack</span>: [<span class="code-str">"HTML5"</span>, <span class="code-str">"CSS3"</span>, <span class="code-str">"Vanilla JS"</span>],
+  <span class="code-prop">animations</span>: [<span class="code-str">"Particles"</span>, <span class="code-str">"3D Tilt"</span>, <span class="code-str">"Glow Borders"</span>],
+  <span class="code-prop">uiQuality</span>: <span class="code-str">"WORLD_CLASS_INSANE"</span>,
+  <span class="code-prop">compatibility</span>: <span class="code-str">"Foldables to 4K TVs"</span>
+};
+<span class="code-function">console</span>.<span class="code-method">log</span>(<span class="code-str">"🚀 Task 2 fully initialized!"</span>);</code></pre>
+              </div>
+              
+              <div class="floating-mini-badges">
+                <div class="mini-badge float-1">⚡ HTML5 Semantic</div>
+                <div class="mini-badge float-2">🎨 Custom Properties</div>
+                <div class="mini-badge float-3">🔊 Web Audio API</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <span class="mouse-icon">
+          <span class="mouse-wheel"></span>
+        </span>
+        <span class="scroll-text">Scroll to explore</span>
+      </div>
+    </section>
+
+    <!-- FEATURES SHOWCASE -->
+    <section class="section-padding" id="features">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-badge">Cutting Edge UX</span>
+          <h2 class="section-title">Maximum Features & <span class="gradient-text">Insane UI Polish</span></h2>
+          <p class="section-description">
+            Built from scratch without bloated frameworks. Every component is optimized for performance, accessibility, and visual perfection.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature Card 1 -->
+          <div class="feature-card glass-card tilt-card" data-tilt>
+            <div class="feature-icon-wrapper icon-gradient-1">
+              <span>🎨</span>
+            </div>
+            <h3 class="feature-title">Dynamic Theme Engine</h3>
+            <p class="feature-text">Switch instantly between Cyberpunk, Aurora, Deep Space, Emerald Matrix, and Pearl Light modes with customizable dynamic accents.</p>
+            <div class="card-accent-line"></div>
+          </div>
+
+          <!-- Feature Card 2 -->
+          <div class="feature-card glass-card tilt-card" data-tilt>
+            <div class="feature-icon-wrapper icon-gradient-2">
+              <span>✨</span>
+            </div>
+            <h3 class="feature-title">Interactive Particle Canvas</h3>
+            <p class="feature-text">HTML5 GPU-accelerated canvas background that reacts to mouse movement, distance vectors, and color themes in real time.</p>
+            <div class="card-accent-line"></div>
+          </div>
+
+          <!-- Feature Card 3 -->
+          <div class="feature-card glass-card tilt-card" data-tilt>
+            <div class="feature-icon-wrapper icon-gradient-3">
+              <span>📱</span>
+            </div>
+            <h3 class="feature-title">Ultra-Responsive Architecture</h3>
+            <p class="feature-text">Pixel-perfect layout optimized for foldables (280px), mobile devices, tablets, laptops, widescreen monitors, and 4K TV screens.</p>
+            <div class="card-accent-line"></div>
+          </div>
+
+          <!-- Feature Card 4 -->
+          <div class="feature-card glass-card tilt-card" data-tilt>
+            <div class="feature-icon-wrapper icon-gradient-4">
+              <span>🔊</span>
+            </div>
+            <h3 class="feature-title">Synthesized Web Audio</h3>
+            <p class="feature-text">Crisp, non-intrusive sound effects generated dynamically using the Web Audio API—no external MP3/audio files required.</p>
+            <div class="card-accent-line"></div>
+          </div>
+
+          <!-- Feature Card 5 -->
+          <div class="feature-card glass-card tilt-card" data-tilt>
+            <div class="feature-icon-wrapper icon-gradient-5">
+              <span>💻</span>
+            </div>
+            <h3 class="feature-title">Live Component Sandbox</h3>
+            <p class="feature-text">Interactive code playground allowing real-time editing of HTML/CSS elements with instant visual rendering.</p>
+            <div class="card-accent-line"></div>
+          </div>
+
+          <!-- Feature Card 6 -->
+          <div class="feature-card glass-card tilt-card" data-tilt>
+            <div class="feature-icon-wrapper icon-gradient-6">
+              <span>⌘</span>
+            </div>
+            <h3 class="feature-title">Command Palette & Shortcuts</h3>
+            <p class="feature-text">Keyboard-accessible navigation palette (<kbd>Ctrl</kbd> + <kbd>K</kbd>) to instantly search sections, trigger themes, or toggle sound.</p>
+            <div class="card-accent-line"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS & TASK MATRIX SECTION -->
+    <section class="section-padding section-alt" id="skills">
+      <div class="container">
+        <div class="skills-wrapper">
+          <div class="skills-content">
+            <span class="section-badge">DecodeLabs Task Requirements</span>
+            <h2 class="section-title">Static Webpage Design <span class="gradient-text">Core Competencies</span></h2>
+            <p class="section-description">
+              Demonstrating complete mastery over foundational and modern web standards set by DecodeLabs Frontend Internship.
+            </p>
+
+            <div class="skill-bars-list">
+              <div class="skill-bar-item">
+                <div class="skill-info">
+                  <span class="skill-name">Semantic HTML5 & Accessibility</span>
+                  <span class="skill-percentage">100%</span>
+                </div>
+                <div class="skill-track">
+                  <div class="skill-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div class="skill-bar-item">
+                <div class="skill-info">
+                  <span class="skill-name">Modern CSS Grid, Flexbox & Glassmorphism</span>
+                  <span class="skill-percentage">98%</span>
+                </div>
+                <div class="skill-track">
+                  <div class="skill-fill" style="width: 98%;"></div>
+                </div>
+              </div>
+
+              <div class="skill-bar-item">
+                <div class="skill-info">
+                  <span class="skill-name">Vanilla JS ES6+ & Micro-Interactions</span>
+                  <span class="skill-percentage">95%</span>
+                </div>
+                <div class="skill-track">
+                  <div class="skill-fill" style="width: 95%;"></div>
+                </div>
+              </div>
+
+              <div class="skill-bar-item">
+                <div class="skill-info">
+                  <span class="skill-name">Cross-Device Responsiveness (Foldable to 4K)</span>
+                  <span class="skill-percentage">100%</span>
+                </div>
+                <div class="skill-track">
+                  <div class="skill-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="skills-interactive-card glass-card glowing-border">
+            <div class="card-badge">DecodeLabs Task Matrix</div>
+            <h3 class="interactive-card-title">Interactive Project Checklist</h3>
+            <ul class="task-checklist">
+              <li class="checked">
+                <span class="check-icon">✓</span>
+                <div class="task-detail">
+                  <strong>Semantic HTML Structure</strong>
+                  <span>Headings, sections, articles, and aria attributes</span>
+                </div>
+              </li>
+              <li class="checked">
+                <span class="check-icon">✓</span>
+                <div class="task-detail">
+                  <strong>Custom CSS Styling & Tokens</strong>
+                  <span>Variables, custom scrollbars, glowing borders</span>
+                </div>
+              </li>
+              <li class="checked">
+                <span class="check-icon">✓</span>
+                <div class="task-detail">
+                  <strong>Rich Animations & 3D Physics</strong>
+                  <span>GPU keyframes, tilt response, particle vectors</span>
+                </div>
+              </li>
+              <li class="checked">
+                <span class="check-icon">✓</span>
+                <div class="task-detail">
+                  <strong>Multi-Theme System</strong>
+                  <span>5 stunning color themes + localStorage persistence</span>
+                </div>
+              </li>
+            </ul>
+            <button class="btn-primary w-100" id="triggerConfettiBtn">🎉 Celebrate Project Completion</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE COMPONENT PLAYGROUND / SANDBOX -->
+    <section class="section-padding" id="playground">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-badge">Live Interactive Sandbox</span>
+          <h2 class="section-title">Real-Time <span class="gradient-text">Code & Component Editor</span></h2>
+          <p class="section-description">
+            Edit HTML structure and CSS variables directly in the sandbox below to see instant visual changes rendered live!
+          </p>
+        </div>
+
+        <div class="sandbox-container glass-card glowing-border">
+          <div class="sandbox-toolbar">
+            <div class="toolbar-left">
+              <span class="sandbox-tag">LIVE EDITOR</span>
+              <button class="sandbox-preset-btn active" data-preset="button">Card Preset</button>
+              <button class="sandbox-preset-btn" data-preset="badge">Badge Preset</button>
+              <button class="sandbox-preset-btn" data-preset="glow">Glow Box</button>
+            </div>
+            <div class="toolbar-right">
+              <button class="glass-btn btn-sm" id="resetSandboxBtn">Reset Code</button>
+            </div>
+          </div>
+
+          <div class="sandbox-split">
+            <!-- Code Input Panel -->
+            <div class="sandbox-editor-panel">
+              <div class="editor-header">
+                <span>HTML / CSS Snippet</span>
+                <span class="lang-tag">HTML</span>
+              </div>
+              <textarea id="sandboxInput" class="code-input-textarea" spellcheck="false"></textarea>
+            </div>
+
+            <!-- Live Output Preview Panel -->
+            <div class="sandbox-preview-panel">
+              <div class="editor-header">
+                <span>Visual Render Output</span>
+                <span class="live-dot">LIVE</span>
+              </div>
+              <div id="sandboxOutput" class="sandbox-output-viewport"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MULTI-DEVICE SIMULATOR -->
+    <section class="section-padding section-alt" id="devices">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-badge">Responsive Breakpoint Emulator</span>
+          <h2 class="section-title">Tested Across <span class="gradient-text">All Screen Sizes</span></h2>
+          <p class="section-description">
+            Test how the webpage dynamically adjusts layout, font sizing, and spacing across various screen viewports.
+          </p>
+        </div>
+
+        <div class="device-simulator-wrapper">
+          <div class="device-selector-tabs">
+            <button class="device-tab active" data-device="desktop">
+              <span class="tab-icon">🖥️</span> Desktop (1440px)
+            </button>
+            <button class="device-tab" data-device="laptop">
+              <span class="tab-icon">💻</span> Laptop (1024px)
+            </button>
+            <button class="device-tab" data-device="tablet">
+              <span class="tab-icon">📱</span> Tablet (768px)
+            </button>
+            <button class="device-tab" data-device="mobile">
+              <span class="tab-icon">📲</span> Smartphone (375px)
+            </button>
+            <button class="device-tab" data-device="foldable">
+              <span class="tab-icon">📐</span> Foldable (280px)
+            </button>
+          </div>
+
+          <div class="device-frame-container">
+            <div class="device-frame desktop-mode" id="deviceFrame">
+              <div class="frame-bar">
+                <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+                <div class="url-input" id="deviceUrlDisplay">https://decodelabs-task2.frontend/preview</div>
+                <span class="dimension-badge" id="dimensionBadge">1440px × 900px</span>
+              </div>
+              <div class="frame-content">
+                <iframe id="previewIframe" src="about:blank" title="Responsive Preview Sandbox"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CONTACT & FEEDBACK -->
+    <section class="section-padding" id="contact">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info-panel glass-card">
+            <span class="section-badge">Get In Touch</span>
+            <h2 class="section-title">Let's Connect & <span class="gradient-text">Collaborate</span></h2>
+            <p class="section-description">
+              Have feedback on this DecodeLabs Frontend Task 2 submission or want to build next-generation web applications? Send a message directly!
+            </p>
+
+            <div class="info-items">
+              <div class="info-item">
+                <span class="info-icon">📍</span>
+                <div>
+                  <strong>Location</strong>
+                  <span>DecodeLabs Internship Workspace</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">✉️</span>
+                <div>
+                  <strong>Task Submission</strong>
+                  <span>Frontend Engineering Task 2</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">⚡</span>
+                <div>
+                  <strong>Performance Score</strong>
+                  <span>Lighthouse 100/100 Optimized</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-panel glass-card glowing-border">
+            <form id="contactForm" novalidate>
+              <h3 class="form-title">Send Direct Message</h3>
+              
+              <div class="form-group">
+                <label for="userName" class="form-label">Your Name</label>
+                <input type="text" id="userName" class="form-control glass-input" placeholder="e.g. Alex Morgan" required>
+                <span class="error-msg" id="nameError">Please enter your name</span>
+              </div>
+
+              <div class="form-group">
+                <label for="userEmail" class="form-label">Email Address</label>
+                <input type="email" id="userEmail" class="form-control glass-input" placeholder="alex@example.com" required>
+                <span class="error-msg" id="emailError">Please enter a valid email address</span>
+              </div>
+
+              <div class="form-group">
+                <label for="userMessage" class="form-label">Message / Feedback</label>
+                <textarea id="userMessage" class="form-control glass-input" rows="4" placeholder="Share your thoughts on Task 2..." required></textarea>
+                <span class="error-msg" id="messageError">Please enter a message</span>
+              </div>
+
+              <button type="submit" class="btn-primary w-100 glow-effect" id="submitFormBtn">
+                <span>Submit Message</span>
+                <span class="btn-spinner" id="formSpinner" style="display: none;"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer-wrapper">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="brand-logo-hex">
+          <span class="hex-inner">&lt;/&gt;</span>
+        </div>
+        <span class="brand-text">Decode<span class="highlight">Labs</span></span>
+      </div>
+      <p class="footer-text">
+        Crafted with ❤️ and passion for DecodeLabs Frontend Development Internship Task 2.
+      </p>
+      <div class="footer-shortcuts">
+        <span>Press <kbd>Ctrl</kbd> + <kbd>K</kbd> for Command Palette</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- COMMAND PALETTE MODAL -->
+  <div class="modal-backdrop" id="cmdPaletteModal">
+    <div class="cmd-palette-box glass-card glowing-border">
+      <div class="cmd-search-header">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="cmdSearchInput" placeholder="Type a command or search section..." autocomplete="off">
+        <kbd class="esc-kbd">ESC</kbd>
+      </div>
+
+      <div class="cmd-options-list" id="cmdOptionsList">
+        <div class="cmd-item" data-action="goto-hero">
+          <span class="cmd-icon">🏠</span>
+          <div class="cmd-text"><strong>Go to Home / Hero</strong><span>Jump to top hero section</span></div>
+        </div>
+        <div class="cmd-item" data-action="goto-features">
+          <span class="cmd-icon">⚡</span>
+          <div class="cmd-text"><strong>Go to Features</strong><span>Explore features and tech stack</span></div>
+        </div>
+        <div class="cmd-item" data-action="goto-skills">
+          <span class="cmd-icon">🎯</span>
+          <div class="cmd-text"><strong>Go to Skills Matrix</strong><span>Check Task requirements & competencies</span></div>
+        </div>
+        <div class="cmd-item" data-action="goto-playground">
+          <span class="cmd-icon">💻</span>
+          <div class="cmd-text"><strong>Go to Live Sandbox</strong><span>Open live HTML/CSS editor</span></div>
+        </div>
+        <div class="cmd-item" data-action="goto-devices">
+          <span class="cmd-icon">📱</span>
+          <div class="cmd-text"><strong>Device Simulator</strong><span>Test responsive breakpoints</span></div>
+        </div>
+        <div class="cmd-item" data-action="toggle-sound">
+          <span class="cmd-icon">🔊</span>
+          <div class="cmd-text"><strong>Toggle Audio Effects</strong><span>Mute/Unmute UI feedback sounds</span></div>
+        </div>
+        <div class="cmd-item" data-action="cycle-theme">
+          <span class="cmd-icon">🎨</span>
+          <div class="cmd-text"><strong>Switch Theme</strong><span>Cycle through Cyberpunk, Aurora, Deep Space...</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

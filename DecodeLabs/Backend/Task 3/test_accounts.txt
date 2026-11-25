@@ -1,0 +1,8 @@
+Here are some test accounts that have been injected into the database. 
+You can use these credentials to log in on the frontend.
+
+Username        | Password
+----------------|------------------
+admin           | admin
+amine           | securePass2026
+guest           | guestAccess

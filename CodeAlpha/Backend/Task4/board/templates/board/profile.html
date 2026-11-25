@@ -1,0 +1,104 @@
+{% extends 'board/base.html' %}
+
+{% block title %}Edit Profile - CareerPulse{% endblock %}
+
+{% block content %}
+<div style="margin-top: 2rem;">
+    <a href="{% url 'dashboard' %}" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-weight: 500; margin-bottom: 1.5rem;" class="nav-link">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Back to Dashboard
+    </a>
+</div>
+
+<div class="auth-wrapper" style="padding: 2rem 0;">
+    <div class="auth-card" style="max-width: 650px;">
+        <h2 class="auth-title" style="text-align: left;">Edit Profile Settings</h2>
+        <p class="auth-subtitle" style="text-align: left; margin-bottom: 1.5rem;">Keep your details updated so others can discover your profile.</p>
+        
+        <form method="POST" action="{% url 'profile' %}" class="auth-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Standard User fields -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" id="first_name" class="input-field" value="{{ user.first_name }}" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" id="last_name" class="input-field" value="{{ user.last_name }}" placeholder="Last Name">
+                </div>
+            </div>
+
+            {% if role == 'employer' %}
+                <!-- Employer Fields -->
+                <div class="form-group">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" name="company_name" id="company_name" class="input-field" value="{{ emp_profile.company_name }}" required>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="location">HQ Location</label>
+                        <input type="text" name="location" id="location" class="input-field" value="{{ emp_profile.location }}" placeholder="e.g. San Francisco, CA">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="website">Website Link</label>
+                        <input type="url" name="website" id="website" class="input-field" value="{{ emp_profile.website|default:'' }}" placeholder="https://company.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="logo_url">Company Logo URL</label>
+                    <input type="url" name="logo_url" id="logo_url" class="input-field" value="{{ emp_profile.logo_url|default:'' }}" placeholder="https://example.com/logo.png">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Company Description</label>
+                    <textarea name="description" id="description" rows="6" class="input-field" style="resize: vertical;">{{ emp_profile.description }}</textarea>
+                </div>
+
+            {% else %}
+                <!-- Candidate Fields -->
+                <div class="form-group">
+                    <label for="bio">Professional Summary / Bio</label>
+                    <textarea name="bio" id="bio" rows="4" class="input-field" style="resize: vertical;" placeholder="A brief summary about yourself...">{{ cand_profile.bio }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Skills (Comma-separated)</label>
+                    <input type="text" name="skills" id="skills" class="input-field" value="{{ cand_profile.skills }}" placeholder="e.g., Python, Django, JavaScript, CSS">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Separate each skill with a comma.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <textarea name="education" id="education" rows="3" class="input-field" style="resize: vertical;" placeholder="Degree, School name, graduation year...">{{ cand_profile.education }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Work Experience</label>
+                    <textarea name="experience" id="experience" rows="5" class="input-field" style="resize: vertical;" placeholder="Company Name, Job Title, tenure, details...">{{ cand_profile.experience }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="resume">Upload / Replace CV (PDF or Word)</label>
+                    {% if cand_profile.resume %}
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                            Current Resume: <a href="{{ cand_profile.resume.url }}" download style="color: var(--color-primary); font-weight: 500;">Download CV File</a>
+                        </p>
+                    {% endif %}
+                    <input type="file" name="resume" id="resume" class="input-field">
+                </div>
+            {% endif %}
+
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="flex: 1;">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="flex: 2;">
+                    Save Profile <i data-lucide="save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

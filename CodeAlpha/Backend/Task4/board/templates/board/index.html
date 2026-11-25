@@ -1,0 +1,122 @@
+{% extends 'board/base.html' %}
+
+{% block title %}Find Jobs - CareerPulse{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <h1 class="hero-title">Your next career move starts here</h1>
+    <p class="hero-subtitle">Discover thousands of job opportunities from top companies around the world with instant application status tracking.</p>
+</section>
+
+<!-- Search and Filter Card -->
+<div class="search-card">
+    <form method="GET" action="{% url 'index' %}" class="search-form">
+        <!-- Keyword Query -->
+        <div class="form-group">
+            <label for="search-input">Keywords</label>
+            <input type="text" name="q" id="search-input" class="input-field" placeholder="Job title, description..." value="{{ q }}">
+        </div>
+
+        <!-- Location Dropdown/Text -->
+        <div class="form-group">
+            <label for="location-select">Location</label>
+            <select name="location" id="location-select" class="input-field">
+                <option value="">All Locations</option>
+                {% for loc in locations %}
+                    {% if loc %}
+                        <option value="{{ loc }}" {% if selected_location == loc %}selected{% endif %}>{{ loc }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Job Type Dropdown -->
+        <div class="form-group">
+            <label for="type-select">Job Type</label>
+            <select name="type" id="type-select" class="input-field">
+                <option value="">All Types</option>
+                {% for code, label in job_types %}
+                    <option value="{{ code }}" {% if selected_type == code %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="form-group">
+            <label for="category-select">Category</label>
+            <select name="category" id="category-select" class="input-field">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    {% if cat %}
+                        <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary" style="height: 46px; margin-top: auto;">
+            <i data-lucide="search"></i> Search
+        </button>
+    </form>
+</div>
+
+<!-- Active Job Postings -->
+<div class="container" style="max-width: 900px;">
+    <h2 class="job-list-title">
+        {% if q or selected_location or selected_type or selected_category %}
+            Search Results ({{ jobs.count }})
+        {% else %}
+            Latest Job Openings
+        {% endif %}
+    </h2>
+
+    <div class="jobs-grid">
+        {% for job in jobs %}
+            <div class="job-card">
+                <div class="job-card-info">
+                    <span style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">
+                        {{ job.employer.employer_profile.company_name }}
+                    </span>
+                    <h3 class="job-card-title">{{ job.title }}</h3>
+                    
+                    <div class="job-card-meta">
+                        <div class="meta-item">
+                            <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i> {{ job.location }}
+                        </div>
+                        {% if job.salary_range %}
+                            <div class="meta-item">
+                                <i data-lucide="dollar-sign" style="width: 14px; height: 14px;"></i> {{ job.salary_range }}
+                            </div>
+                        {% endif %}
+                        <div class="meta-item">
+                            <i data-lucide="clock" style="width: 14px; height: 14px;"></i> {{ job.created_at|timesince }} ago
+                        </div>
+                    </div>
+
+                    <div class="job-tags">
+                        <span class="badge badge-{{ job.job_type }}">
+                            {{ job.get_job_type_display }}
+                        </span>
+                        <span class="badge" style="background-color: var(--border-color); color: var(--text-secondary);">
+                            {{ job.category }}
+                        </span>
+                    </div>
+                </div>
+
+                <a href="{% url 'job_detail' job.pk %}" class="btn btn-secondary">
+                    View Details <i data-lucide="arrow-right"></i>
+                </a>
+            </div>
+        {% empty %}
+            <div style="text-align: center; padding: 4rem 2rem; background-color: var(--bg-surface); border: 1px dashed var(--border-color); border-radius: var(--radius-md);">
+                <i data-lucide="frown" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <h3 style="margin-bottom: 0.5rem;">No jobs match your search</h3>
+                <p style="color: var(--text-secondary);">Try clearing some filters or refining your keywords.</p>
+                <a href="{% url 'index' %}" class="btn btn-primary" style="margin-top: 1.5rem;">Clear All Filters</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
